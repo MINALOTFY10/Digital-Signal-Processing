@@ -128,27 +128,29 @@ class FourthTask:
 
         indices=[]
         Samples = []
-        currentValue = 0
         for i in range(len(amplitudeList)):
-            accumulator = 0
+            summation = 0
 
             for j in range(len(amplitudeList)):
-                currentValue = complex(amplitudeList[j] * math.cos(phaseShiftList[j]), amplitudeList[j] * math.sin(phaseShiftList[j]))
+                # computing the DFT component by (real = A*cos(Phase Shift)) and (imag = A*sin(Phase Shift))
+                dftComponent = complex(amplitudeList[j] * math.cos(phaseShiftList[j]), amplitudeList[j] * math.sin(phaseShiftList[j]))
 
                 angle = 2 * math.pi * i * j / len(amplitudeList)
                 cosValue = math.cos(angle)
                 sinValue = math.sin(angle)
 
-                eValue = complex(cosValue, sinValue)
+                exponentialTerm = complex(cosValue, sinValue)
 
-                currentValue *= eValue
+                xnTerm =  dftComponent * exponentialTerm
 
-                accumulator += currentValue
+                summation += xnTerm
 
-            accumulator /= len(amplitudeList)
+            summation /= len(amplitudeList)
 
             indices.append(i)
-            Samples.append(round(accumulator.real))
+            Samples.append(round(summation.real))
 
         # Testing:
+        print(indices)
+        print(Samples)
         SignalSamplesAreEqual("IDTF", "utils/IDFT/Output_Signal_IDFT.txt", indices, Samples)
