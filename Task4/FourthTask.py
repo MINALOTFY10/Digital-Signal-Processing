@@ -14,8 +14,10 @@ from utils.plotSignal import plotSignal, plotDiscreteSignal
 class FourthTask:
 
     @staticmethod
-    def DiscreteFourierTransformTest(amplitudeList, phaseShiftList):
+    def testDiscreteFourierTransform(amplitudeList, phaseShiftList):
         noOfSample, outputAmplitudeList, outputPhaseShiftList = FileReader.browse_signal_file()
+        for i in range(len(amplitudeList)):
+            outputAmplitudeList[i] = round(outputAmplitudeList[i], 13)
         print("My Samples: ")
         print(amplitudeList)
         print(phaseShiftList)
@@ -23,21 +25,19 @@ class FourthTask:
         print(outputAmplitudeList)
         print(outputPhaseShiftList)
 
-        for i in range(len(amplitudeList)):
-            amplitudeList[i] = round(amplitudeList[i], 13)
-            outputAmplitudeList[i] = round(outputAmplitudeList[i], 13)
-
         if SignalComapreAmplitude(amplitudeList, outputAmplitudeList) and SignalComaprePhaseShift(phaseShiftList,
                                                                                                   outputPhaseShiftList):
-            print("DFT Test case passed successfully")
+            print("DFT Test case passed successfully :)")
+        else:
+            print("DFT Test case failed !!!!!!!")
 
     @staticmethod
-    def DisplayAmplitudePhaseGraphs(amplitudeList, phaseShiftList, SamplingFrequency, listOfSamples):
+    def DisplayAmplitudePhaseGraphs(amplitudeList, phaseShiftList, SamplingFrequency):
 
-        fundamentalFrequency = ((2 * math.pi) * int(SamplingFrequency)) / len(listOfSamples)
+        fundamentalFrequency = ((2 * math.pi) * int(SamplingFrequency)) / len(amplitudeList)
 
         fundamentalFrequencyList = [fundamentalFrequency]
-        for i in range(1, len(listOfSamples)):
+        for i in range(1, len(amplitudeList)):
             fundamentalFrequencyList.append(fundamentalFrequencyList[i - 1] + fundamentalFrequency)
 
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
@@ -48,18 +48,16 @@ class FourthTask:
         plt.show()
 
     @staticmethod
+    # Frequency components saved in txt file in polar form (amplitude and phase)
     def SaveInTxtFileInPolarForm(IsPeriodic, signalType, noOfSample, amplitudeList, phaseShiftList, file_path):
         # Specify the filename
         filename = file_path
 
         # Check if the file already exists
         if os.path.exists(filename):
-            # If the file exists, delete it
             os.remove(filename)
 
-        # Create and open the new file in write mode
         with open(filename, "w") as file:
-            # Write the contents of list1 to the file
             file.write(str(IsPeriodic))
             file.write("\n")
             file.write(str(signalType))
@@ -74,76 +72,82 @@ class FourthTask:
                 file.write("\n")
 
     @staticmethod
-    def EditAmplitudePhaseOfSignal(index, amplitude, phase):
+    # Allow modification of the amplitude and phase of the signal components.
+    def EditAmplitudePhaseOfSignal(index, amplitude, phase, samplingFrequency):
         file_path = filedialog.askopenfilename(initialdir="/", title="Select a file",
                                                filetypes=(("Text files", "*.txt"), ("all files", "*.*")))
 
         noOfSamples, amplitudeList, phaseShiftList = FileReader.processing_signal(file_path)
 
-        amplitudeList[int(index)] = amplitude
-        phaseShiftList[int(index)] = phase
+        amplitudeList[int(index)] = float(amplitude)
+        phaseShiftList[int(index)] = float(phase)
 
         # Edit The file
         FourthTask.SaveInTxtFileInPolarForm(0, 1, noOfSamples, amplitudeList, phaseShiftList, file_path)
 
+        # Plotting The graph
+        if samplingFrequency != "":
+            FourthTask.DisplayAmplitudePhaseGraphs(amplitudeList, phaseShiftList, samplingFrequency)
+        else:
+            FourthTask.DisplayAmplitudePhaseGraphs(amplitudeList, phaseShiftList, len(amplitudeList))
+
+
     @staticmethod
+    # Applying Fourier transform
     def DiscreteFourierTransform(SamplingFrequency):
         IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
 
-        frquencyies = []
+        frequencies = []
         for i in range(len(listOfSamples)):
-            realValue = 0
-            imagValue = 0
+            summation = 0
 
             for j in range(len(listOfSamples)):
                 angle = 2 * math.pi * i * j / len(listOfSamples)
                 cosValue = math.cos(angle)
                 sinValue = -math.sin(angle)
 
-                realValue += listOfSamples[j] * cosValue
-                imagValue += listOfSamples[j] * sinValue
+                summation += listOfSamples[j] * complex(cosValue, sinValue)
 
-            frquencyies.append(complex(round(realValue, 14), round(imagValue, 14)))
+            frequencies.append(summation)
 
         amplitudeList = []
         phaseShiftList = []
 
-        for i in range(len(frquencyies)):
-            amplitudeList.append(round(math.sqrt(frquencyies[i].real ** 2 + frquencyies[i].imag ** 2), 14))
-            phaseShiftList.append(round(math.atan2(frquencyies[i].imag, frquencyies[i].real), 14))
+        for i in range(len(frequencies)):
+            amplitudeList.append(round(math.sqrt(frequencies[i].real ** 2 + frequencies[i].imag ** 2), 13))
+            phaseShiftList.append(math.atan2(frequencies[i].imag, frequencies[i].real))
 
         # Testing:
-        # FourthTask.DiscreteFourierTransformTest(amplitudeList, phaseShiftList)
+        FourthTask.testDiscreteFourierTransform(amplitudeList, phaseShiftList)
 
         # Save in the .txt file
         FourthTask.SaveInTxtFileInPolarForm(IsPeriodic, 1, noOfSample, amplitudeList, phaseShiftList,
                                             "DFT Output.txt")
 
         # Plotting
-        FourthTask.DisplayAmplitudePhaseGraphs(amplitudeList, phaseShiftList, SamplingFrequency, listOfSamples)
+        FourthTask.DisplayAmplitudePhaseGraphs(amplitudeList, phaseShiftList, SamplingFrequency)
+
 
     @staticmethod
+    # Signal reconstruction using IDFT
     def InverseDiscreteFourierTransform():
         noOfSample, amplitudeList, phaseShiftList = FileReader.browse_signal_file()
 
-        indices=[]
+        indices = []
         Samples = []
         for i in range(len(amplitudeList)):
             summation = 0
 
             for j in range(len(amplitudeList)):
                 # computing the DFT component by (real = A*cos(Phase Shift)) and (imag = A*sin(Phase Shift))
-                dftComponent = complex(amplitudeList[j] * math.cos(phaseShiftList[j]), amplitudeList[j] * math.sin(phaseShiftList[j]))
+                signalComponent = complex(amplitudeList[j] * math.cos(phaseShiftList[j]),
+                                       amplitudeList[j] * math.sin(phaseShiftList[j]))
 
                 angle = 2 * math.pi * i * j / len(amplitudeList)
                 cosValue = math.cos(angle)
                 sinValue = math.sin(angle)
 
-                exponentialTerm = complex(cosValue, sinValue)
-
-                xnTerm =  dftComponent * exponentialTerm
-
-                summation += xnTerm
+                summation += signalComponent * complex(cosValue, sinValue)
 
             summation /= len(amplitudeList)
 
@@ -154,3 +158,11 @@ class FourthTask:
         print(indices)
         print(Samples)
         SignalSamplesAreEqual("IDTF", "utils/IDFT/Output_Signal_IDFT.txt", indices, Samples)
+
+        # Plot the Signal
+        plt.scatter(indices, Samples, label='Data Points', color='b', marker='o')
+        plt.title("IDFT")
+        plt.plot(indices, Samples, marker='o', color='b', linestyle='-')
+        plt.legend()
+        plt.xlim(0, 30)
+        plt.show()

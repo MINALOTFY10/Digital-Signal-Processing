@@ -60,8 +60,7 @@ def Task4(index, amplitude, phase, freq, command):
     if command == "DFT":
         FourthTask.DiscreteFourierTransform(freq.get())
     elif command == "Edit":
-        FourthTask.EditAmplitudePhaseOfSignal(index.get(), amplitude.get(), phase.get())
-
+        FourthTask.EditAmplitudePhaseOfSignal(index.get(), amplitude.get(), phase.get(), freq.get())
     elif command == "IDFT":
         FourthTask.InverseDiscreteFourierTransform()
 
@@ -235,43 +234,43 @@ class AppWindow(tk.Tk):
         task4new_window.geometry("900x750")
 
         task4new_window.label = tk.Label(task4new_window, text="Sampling Frequency:", font=('Arial', 12))
-        task4new_window.label.pack(pady=20)
+        task4new_window.label.pack(pady=0)
 
         task4new_window.frequency_entry = tk.Entry(task4new_window, width=20)
         task4new_window.frequency_entry.pack()
 
         button = tk.Button(task4new_window, text="Apply Fourier transform",
                            command=lambda: Task4("", "", "", task4new_window.frequency_entry, "DFT"),
-                           width=20, height=3)
+                           width=30, height=3)
         button.pack(pady=20)
 
         # The Edit Option
         task4new_window.label = tk.Label(task4new_window, text="Index:", font=('Arial', 12))
-        task4new_window.label.place(x=(748 / 2), y=200)
+        task4new_window.label.place(x=(748 / 2), y=250)
         task4new_window.index_entry = tk.Entry(task4new_window, width=20)
-        task4new_window.index_entry.place(x=(750 / 2), y=220)
+        task4new_window.index_entry.place(x=(750 / 2), y=270)
 
         task4new_window.label = tk.Label(task4new_window, text="New Amplitude:", font=('Arial', 12))
-        task4new_window.label.place(x=(748 / 2), y=240)
+        task4new_window.label.place(x=(748 / 2), y=290)
         task4new_window.amplitude_entry = tk.Entry(task4new_window, width=20)
-        task4new_window.amplitude_entry.place(x=(750 / 2), y=260)
+        task4new_window.amplitude_entry.place(x=(750 / 2), y=310)
 
-        task4new_window.label = tk.Label(task4new_window, text="New Phase Shift:", font=('Arial', 12))
-        task4new_window.label.place(x=(748 / 2), y=280)
-        task4new_window.phase_shift_entry = tk.Entry(task4new_window, width=20)
-        task4new_window.phase_shift_entry.place(x=(750 / 2), y=300)
+        task4new_window.label = tk.Label(task4new_window, text="New Phase Shift in rad:", font=('Arial', 12))
+        task4new_window.label.place(x=(748 / 2), y=330)
+        task4new_window.phase_shift_entry = tk.Entry(task4new_window, width=30)
+        task4new_window.phase_shift_entry.place(x=(750 / 2), y=350)
 
-        button = tk.Button(task4new_window, text="Edit The Signal",
+        button = tk.Button(task4new_window, text="Edit Signal in the Polar From",
                            command=lambda: Task4(task4new_window.index_entry, task4new_window.amplitude_entry,
-                                                 task4new_window.phase_shift_entry, " ", "Edit"
+                                                 task4new_window.phase_shift_entry,  task4new_window.frequency_entry, "Edit"
                                                  ),
-                           width=20, height=3)
-        button.pack(pady=140)
+                           width=30, height=3)
+        button.pack(pady=235)
 
 
         button = tk.Button(task4new_window, text="Apply Inverse Fourier transform",
                            command=lambda: Task4("", "", "", "", "IDFT"),
-                           width=20, height=3)
+                           width=30, height=3)
         button.pack(pady=20)
 
     def create_ui_components(self):
