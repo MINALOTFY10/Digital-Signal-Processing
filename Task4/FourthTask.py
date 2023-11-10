@@ -79,14 +79,16 @@ class FourthTask:
 
         noOfSamples, amplitudeList, phaseShiftList = FileReader.processing_signal(file_path)
         wantToEdit = amplitudeList[int(index)]
+        j =0
 
         for i in range(int(noOfSamples)):
-            if amplitudeList[i] == wantToEdit:
+            if amplitudeList[i] == wantToEdit and j == 0:
+                j += 1
                 amplitudeList[i] = float(amplitude)
                 phaseShiftList[i] = float(phase)
-
-        # amplitudeList[int(index)] = float(amplitude)
-        # phaseShiftList[int(index)] = float(phase)
+            elif amplitudeList[i] == wantToEdit:
+                amplitudeList[i] = float(amplitude)
+                phaseShiftList[i] = -float(phase)
 
         # Save The file
         FourthTask.SaveInTxtFileInPolarForm(0, 1, noOfSamples, amplitudeList, phaseShiftList, file_path)
