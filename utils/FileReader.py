@@ -28,7 +28,7 @@ class FileReader:
 
                 for i in range(int(arrayOfData[2])):
                     indices = FileReader.clean_and_convert(split_list[i][0], "float")
-                    samples = FileReader.clean_and_convert(split_list[i][1], "int")
+                    samples = FileReader.clean_and_convert(split_list[i][1], "float")
 
                     indicesList.append(indices)
                     sampleList.append(samples)

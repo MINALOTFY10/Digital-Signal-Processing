@@ -11,6 +11,7 @@ from Task1.SinCosSignalGenerator import SinCosSignalGenerator
 from Task2.ArithmeticOperations import ArithmeticOperations
 from Task3.Quantization import Quantization
 from Task4.FourthTask import FourthTask
+from Task5.FifthTask import FifthTask
 from test import QuantizationTest1, QuantizationTest2
 from utils.FileReader import FileReader
 
@@ -27,7 +28,7 @@ def display_signal():
 
 
 # Task 1.2 Generate Sin & Cos Signals
-def generate_signal(self, choice, amp_entry, freq_entry, sampling_entry, phase_entry):
+def generate_signals(choice, amp_entry, freq_entry, sampling_entry, phase_entry):
     signal_generator = SinCosSignalGenerator(amp_entry, freq_entry, sampling_entry, phase_entry)
     signal_generator.generate_signal(choice)
 
@@ -63,6 +64,11 @@ def Task4(index, amplitude, phase, freq, command):
         FourthTask.EditAmplitudePhaseOfSignal(index.get(), amplitude.get(), phase.get(), freq.get())
     elif command == "IDFT":
         FourthTask.InverseDiscreteFourierTransform()
+
+
+def Task5(command):
+    if command == "DCT":
+        FifthTask.DCT()
 
 
 class AppWindow(tk.Tk):
@@ -113,11 +119,15 @@ class AppWindow(tk.Tk):
         menu.add_cascade(label="Signal Generation", menu=signal_menu)
 
         signal_menu.add_command(label="Sine Wave",
-                                command=lambda: generate_signal(0, new_window.amp_entry, new_window.freq_entry,
-                                                                new_window.sampling_entry, new_window.phase_entry))
+                                command=lambda: generate_signals(0, new_window.amp_entry,
+                                                                 new_window.freq_entry,
+                                                                 new_window.sampling_entry,
+                                                                 new_window.phase_entry))
         signal_menu.add_command(label="Cosine Wave",
-                                command=lambda: generate_signal(1, new_window.amp_entry, new_window.freq_entry,
-                                                                new_window.sampling_entry, new_window.phase_entry))
+                                command=lambda: generate_signals(1, new_window.amp_entry,
+                                                                 new_window.freq_entry,
+                                                                 new_window.sampling_entry,
+                                                                 new_window.phase_entry))
 
     # Task 2 GUI
     def task_two_window(self):
@@ -262,14 +272,24 @@ class AppWindow(tk.Tk):
 
         button = tk.Button(task4new_window, text="Edit Signal in the Polar From",
                            command=lambda: Task4(task4new_window.index_entry, task4new_window.amplitude_entry,
-                                                 task4new_window.phase_shift_entry,  task4new_window.frequency_entry, "Edit"
+                                                 task4new_window.phase_shift_entry, task4new_window.frequency_entry,
+                                                 "Edit"
                                                  ),
                            width=30, height=3)
         button.pack(pady=235)
 
-
         button = tk.Button(task4new_window, text="Apply Inverse Fourier transform",
                            command=lambda: Task4("", "", "", "", "IDFT"),
+                           width=30, height=3)
+        button.pack(pady=20)
+
+    def task_five_window(self):
+        task5new_window = tk.Toplevel(self)
+        task5new_window.title("Task 5")
+        task5new_window.geometry("900x750")
+
+        button = tk.Button(task5new_window, text="Apply Discrete Cosine transform",
+                           command=lambda: Task5("DCT"),
                            width=30, height=3)
         button.pack(pady=20)
 
@@ -282,6 +302,8 @@ class AppWindow(tk.Tk):
         button = tk.Button(self, text="Task 3", command=self.task_three_window, width=20, height=3)
         button.pack(pady=20)
         button = tk.Button(self, text="Task 4", command=self.task_four_window, width=20, height=3)
+        button.pack(pady=20)
+        button = tk.Button(self, text="Task 5", command=self.task_five_window, width=20, height=3)
         button.pack(pady=20)
 
 
