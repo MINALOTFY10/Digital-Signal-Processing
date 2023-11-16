@@ -78,7 +78,17 @@ class FourthTask:
                                                filetypes=(("Text files", "*.txt"), ("all files", "*.*")))
 
         noOfSamples, amplitudeList, phaseShiftList = FileReader.processing_signal(file_path)
+        wantToEdit = amplitudeList[int(index)]
+        j = 0
 
+        for i in range(int(noOfSamples)):
+            if amplitudeList[i] == wantToEdit and j == 0:
+                j += 1
+                amplitudeList[i] = float(amplitude)
+                phaseShiftList[i] = float(phase)
+            elif amplitudeList[i] == wantToEdit:
+                amplitudeList[i] = float(amplitude)
+                phaseShiftList[i] = -float(phase)
         amplitudeList[int(index)] = float(amplitude)
         phaseShiftList[int(index)] = float(phase)
 
@@ -90,7 +100,6 @@ class FourthTask:
             FourthTask.DisplayAmplitudePhaseGraphs(amplitudeList, phaseShiftList, samplingFrequency)
         else:
             FourthTask.DisplayAmplitudePhaseGraphs(amplitudeList, phaseShiftList, len(amplitudeList))
-
 
     @staticmethod
     # Applying Fourier transform
@@ -127,7 +136,6 @@ class FourthTask:
         # Plotting
         FourthTask.DisplayAmplitudePhaseGraphs(amplitudeList, phaseShiftList, SamplingFrequency)
 
-
     @staticmethod
     # Signal reconstruction using IDFT
     def InverseDiscreteFourierTransform():
@@ -141,7 +149,7 @@ class FourthTask:
             for j in range(len(amplitudeList)):
                 # computing the DFT component by (real = A*cos(Phase Shift)) and (imag = A*sin(Phase Shift))
                 signalComponent = complex(amplitudeList[j] * math.cos(phaseShiftList[j]),
-                                       amplitudeList[j] * math.sin(phaseShiftList[j]))
+                                          amplitudeList[j] * math.sin(phaseShiftList[j]))
 
                 angle = 2 * math.pi * i * j / len(amplitudeList)
                 cosValue = math.cos(angle)
