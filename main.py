@@ -69,6 +69,8 @@ def Task4(index, amplitude, phase, freq, command):
 def Task5(command):
     if command == "DCT":
         FifthTask.DCT()
+    elif command == "DCRemove":
+        FifthTask.RemoveDcComponent()
 
 
 class AppWindow(tk.Tk):
@@ -290,6 +292,10 @@ class AppWindow(tk.Tk):
 
         button = tk.Button(task5new_window, text="Apply Discrete Cosine transform",
                            command=lambda: Task5("DCT"),
+                           width=30, height=3)
+        button.pack(pady=20)
+        button = tk.Button(task5new_window, text="Remove DC component",
+                           command=lambda: Task5("DCRemove"),
                            width=30, height=3)
         button.pack(pady=20)
 
