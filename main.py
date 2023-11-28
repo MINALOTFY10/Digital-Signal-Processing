@@ -12,6 +12,7 @@ from Task2.ArithmeticOperations import ArithmeticOperations
 from Task3.Quantization import Quantization
 from Task4.FourthTask import FourthTask
 from Task5.FifthTask import FifthTask
+from Task6.SixthTask import SixthTask
 from test import QuantizationTest1, QuantizationTest2
 from utils.FileReader import FileReader
 
@@ -69,6 +70,15 @@ def Task4(index, amplitude, phase, freq, command):
 def Task5(command, coefficients):
     if command == "DCT":
         FifthTask.DCT(coefficients.get())
+    elif command == "DCRemove":
+        FifthTask.RemoveDcComponent()
+
+
+def Task6(command, windowSizeEntry):
+    if command == "Smoothing":
+        SixthTask.Smoothing(windowSizeEntry.get())
+    elif command == "Sharpening":
+        FifthTask.RemoveDcComponent()
     elif command == "DCRemove":
         FifthTask.RemoveDcComponent()
 
@@ -305,6 +315,32 @@ class AppWindow(tk.Tk):
                            width=30, height=3)
         button.pack(pady=20)
 
+    def task_six_window(self):
+        task_six_window = tk.Toplevel(self)
+        task_six_window.title("Task 6")
+        task_six_window.geometry("900x750")
+
+        # 1) Smoothing
+        task_six_window.label = tk.Label(task_six_window, text="Window size :", font=('Arial', 12))
+        task_six_window.label.place(x=90, y=46)
+
+        task_six_window.Window_size = tk.Entry(task_six_window, width=20)
+        task_six_window.Window_size.place(x=200, y=50)
+        button = tk.Button(task_six_window, text="Smoothing (moving average)",
+                           command=lambda: Task6("Smoothing", task_six_window.Window_size),
+                           width=30, height=3)
+        button.pack(pady=20)
+        # 2) Sharpening
+        button = tk.Button(task_six_window, text="Sharpening",
+                           command=lambda: Task6("Sharpening"),
+                           width=30, height=3)
+        button.pack(pady=20)
+        # 6) Remove DC component
+        button = tk.Button(task_six_window, text="Remove DC component",
+                           command=lambda: Task6("DCRemove"),
+                           width=30, height=3)
+        button.pack(pady=20)
+
     def create_ui_components(self):
         # A button To open Task 1 Window
         button = tk.Button(self, text="Task 1", command=self.task_one_window, width=20, height=3)
@@ -316,6 +352,8 @@ class AppWindow(tk.Tk):
         button = tk.Button(self, text="Task 4", command=self.task_four_window, width=20, height=3)
         button.pack(pady=20)
         button = tk.Button(self, text="Task 5", command=self.task_five_window, width=20, height=3)
+        button.pack(pady=20)
+        button = tk.Button(self, text="Task 6", command=self.task_six_window, width=20, height=3)
         button.pack(pady=20)
 
 
