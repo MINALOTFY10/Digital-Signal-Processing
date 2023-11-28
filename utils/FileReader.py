@@ -68,3 +68,7 @@ class FileReader:
     @staticmethod
     def readTestFile():
         return FileReader.processing_signal("DFT/Output_Signal_DFT_A,Phase.txt")
+
+    @staticmethod
+    def readTask5TestFile():
+        return FileReader.processing_signal("test/DCT_output.txt")

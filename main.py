@@ -67,9 +67,9 @@ def Task4(index, amplitude, phase, freq, command):
         FourthTask.InverseDiscreteFourierTransform()
 
 
-def Task5(command):
+def Task5(command, coefficients):
     if command == "DCT":
-        FifthTask.DCT()
+        FifthTask.DCT(coefficients.get())
     elif command == "DCRemove":
         FifthTask.RemoveDcComponent()
 
@@ -300,12 +300,18 @@ class AppWindow(tk.Tk):
         task5new_window.title("Task 5")
         task5new_window.geometry("900x750")
 
+        task5new_window.label = tk.Label(task5new_window, text="m coefficients", font=('Arial', 12))
+        task5new_window.label.pack(pady=0)
+
+        task5new_window.coefficients_entry = tk.Entry(task5new_window, width=20)
+        task5new_window.coefficients_entry.pack()
+
         button = tk.Button(task5new_window, text="Apply Discrete Cosine transform",
-                           command=lambda: Task5("DCT"),
+                           command=lambda: Task5("DCT", task5new_window.coefficients_entry),
                            width=30, height=3)
         button.pack(pady=20)
         button = tk.Button(task5new_window, text="Remove DC component",
-                           command=lambda: Task5("DCRemove"),
+                           command=lambda: Task5("DCRemove", ""),
                            width=30, height=3)
         button.pack(pady=20)
 
