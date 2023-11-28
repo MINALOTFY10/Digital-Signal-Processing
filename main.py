@@ -74,13 +74,19 @@ def Task5(command, coefficients):
         FifthTask.RemoveDcComponent()
 
 
-def Task6(command, windowSizeEntry):
+def Task6(command, windowSizeEntry, ShiftingValueEntry):
     if command == "Smoothing":
         SixthTask.Smoothing(windowSizeEntry.get())
     elif command == "Sharpening":
-        FifthTask.RemoveDcComponent()
+        SixthTask.Sharpening()
+    elif command == "ShiftingSignal":
+        SixthTask.Shifting(ShiftingValueEntry)
+    elif command == "FoldingSignal":
+        SixthTask.FoldingSignal()
+    elif command == "ShiftingFoldedSignal":
+        SixthTask.ShiftingFoldedSignal()
     elif command == "DCRemove":
-        FifthTask.RemoveDcComponent()
+        SixthTask.removeDcComponentFreqDomain()
 
 
 class AppWindow(tk.Tk):
@@ -327,17 +333,42 @@ class AppWindow(tk.Tk):
         task_six_window.Window_size = tk.Entry(task_six_window, width=20)
         task_six_window.Window_size.place(x=200, y=50)
         button = tk.Button(task_six_window, text="Smoothing (moving average)",
-                           command=lambda: Task6("Smoothing", task_six_window.Window_size),
+                           command=lambda: Task6("Smoothing", task_six_window.Window_size, ""),
                            width=30, height=3)
         button.pack(pady=20)
         # 2) Sharpening
         button = tk.Button(task_six_window, text="Sharpening",
-                           command=lambda: Task6("Sharpening"),
+                           command=lambda: Task6("Sharpening", "", ""),
+                           width=30, height=3)
+        button.pack(pady=20)
+        # 3) Shifting signal by K steps
+        task_six_window.label = tk.Label(task_six_window, text="K Steps :", font=('Arial', 12))
+        task_six_window.label.place(x=100, y=227)
+
+        task_six_window.ShiftingValue = tk.Entry(task_six_window, width=20)
+        task_six_window.ShiftingValue.place(x=200, y=230)
+        button = tk.Button(task_six_window, text="Shifting Signal",
+                           command=lambda: Task6("ShiftingSignal", "", task_six_window.ShiftingValue),
+                           width=30, height=3)
+        button.pack(pady=20)
+        # 4) Folding Signal
+        button = tk.Button(task_six_window, text="Folding Signal",
+                           command=lambda: Task6("FoldingSignal", "", ""),
+                           width=30, height=3)
+        button.pack(pady=20)
+        # 5) Shifting Folded signal by K steps
+        task_six_window.label = tk.Label(task_six_window, text="K Steps :", font=('Arial', 12))
+        task_six_window.label.place(x=100, y=420)
+
+        task_six_window.ShiftingValue = tk.Entry(task_six_window, width=20)
+        task_six_window.ShiftingValue.place(x=200, y=420)
+        button = tk.Button(task_six_window, text="Shifting Folded Signal",
+                           command=lambda: Task6("ShiftingFoldedSignal", task_six_window.Window_size, ""),
                            width=30, height=3)
         button.pack(pady=20)
         # 6) Remove DC component
-        button = tk.Button(task_six_window, text="Remove DC component",
-                           command=lambda: Task6("DCRemove"),
+        button = tk.Button(task_six_window, text="Remove DC component Freq Domain",
+                           command=lambda: Task6("DCRemove", "", ""),
                            width=30, height=3)
         button.pack(pady=20)
 
