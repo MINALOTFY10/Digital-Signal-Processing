@@ -4,7 +4,7 @@ import statistics
 from matplotlib import pyplot as plt
 
 from Task2.ArithmeticOperations import ArithmeticOperations
-from test import SignalSamplesAreEqual
+from test import SignalSamplesAreEqual, Shift_Fold_Signal
 from utils.FileReader import FileReader
 from utils.plotSignal import plotSignal
 
@@ -91,40 +91,98 @@ class SixthTask:
             print("Derivative Test case failed")
         return
 
-
     @staticmethod
     def Shifting(shiftingValue):
-        # read one file
-        signalType1, IsPeriodic1, noOfSample1, indices1, listOfSamples1 = FileReader.browse_signal_file()
-        resultSignal = []
-        phaseShift = 0
-
-        phaseShift = int(shiftingValue.get()) * -1
-
-        print(phaseShift)
-        for i in range(len(indices1)):
-            resultSignal.append(indices1[i] + phaseShift)
-
-        print(resultSignal)
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-
-        plotSignal(indices1, listOfSamples1, ax1)
-        plotSignal(resultSignal, listOfSamples1, ax2)
-
-        # Testing
-        # ShiftSignalByConst(int(entry.get()), resultSignal, listOfSamples1)
-
-        plt.show()
+        ArithmeticOperations.shifting(shiftingValue)
 
     @staticmethod
     def FoldingSignal():
-        print("Folding Not Done yet")
+        IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
+
+        FoldedList = listOfSamples[::-1]
+
+        print("Folded List : ", FoldedList)
+        SignalSamplesAreEqual("Folding Signal", "utils/Output_fold.txt", indices, FoldedList)
 
     @staticmethod
-    def ShiftingFoldedSignal():
-        # ArithmeticOperations.shifting(shiftingValue)
-        print("ShiftingFoldedSignal not done yet")
+    def ShiftingFoldedSignal(ShiftingValueEntry):
+
+        IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
+        newIndices = []
+        FoldedList = listOfSamples[::-1]
+
+        phaseShift = int(ShiftingValueEntry.get())
+
+        for i in range(len(indices)):
+            newIndices.append(indices[i] + phaseShift)
+
+        print(newIndices)
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+        plotSignal(indices, FoldedList, ax1)
+        plotSignal(newIndices, FoldedList, ax2)
+
+        Shift_Fold_Signal("utils/Output_ShiftFoldedby-500.txt", newIndices, FoldedList)
+        plt.show()
+        # Testing
 
     @staticmethod
     def removeDcComponentFreqDomain():
-        print("removeDcComponentFreqDomain not done yet")
+        IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
+
+        # DFT
+        frequencies = []
+        for i in range(len(listOfSamples)):
+            summation = 0
+
+            for j in range(len(listOfSamples)):
+                angle = 2 * math.pi * i * j / len(listOfSamples)
+                cosValue = math.cos(angle)
+                sinValue = -math.sin(angle)
+
+                summation += listOfSamples[j] * complex(cosValue, sinValue)
+
+            frequencies.append(summation)
+
+        amplitudeList = []
+        phaseShiftList = []
+
+        frequencies[0] = complex(0, 0)
+
+        for i in range(len(frequencies)):
+            amplitudeList.append(round(math.sqrt(frequencies[i].real ** 2 + frequencies[i].imag ** 2), 13))
+            phaseShiftList.append(math.atan2(frequencies[i].imag, frequencies[i].real))
+
+        # IDFT
+        indices = []
+        Samples = []
+        for i in range(len(amplitudeList)):
+            summation = 0
+
+            for j in range(len(amplitudeList)):
+                # computing the DFT component by (real = A*cos(Phase Shift)) and (imag = A*sin(Phase Shift))
+                signalComponent = complex(amplitudeList[j] * math.cos(phaseShiftList[j]),
+                                          amplitudeList[j] * math.sin(phaseShiftList[j]))
+
+                angle = 2 * math.pi * i * j / len(amplitudeList)
+                cosValue = math.cos(angle)
+                sinValue = math.sin(angle)
+
+                summation += signalComponent * complex(cosValue, sinValue)
+
+            summation /= len(amplitudeList)
+
+            indices.append(i)
+            Samples.append(round(summation.real, 3))
+
+        print("indices: ", indices)
+        print("Samples: ", Samples)
+
+        # Plot the Signal
+        plt.scatter(indices, Samples, label='Data Points', color='b', marker='o')
+        plt.title("DC Removed")
+        plt.plot(indices, Samples, marker='o', color='b', linestyle='-')
+        plt.legend()
+        plt.xlim(0, 30)
+        SignalSamplesAreEqual("DC Remover", "utils/DC_component_output.txt", indices, Samples)
+        plt.show()

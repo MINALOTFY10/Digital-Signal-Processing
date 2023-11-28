@@ -84,7 +84,7 @@ def Task6(command, windowSizeEntry, ShiftingValueEntry):
     elif command == "FoldingSignal":
         SixthTask.FoldingSignal()
     elif command == "ShiftingFoldedSignal":
-        SixthTask.ShiftingFoldedSignal()
+        SixthTask.ShiftingFoldedSignal(ShiftingValueEntry)
     elif command == "DCRemove":
         SixthTask.removeDcComponentFreqDomain()
 
@@ -345,10 +345,10 @@ class AppWindow(tk.Tk):
         task_six_window.label = tk.Label(task_six_window, text="K Steps :", font=('Arial', 12))
         task_six_window.label.place(x=100, y=227)
 
-        task_six_window.ShiftingValue = tk.Entry(task_six_window, width=20)
-        task_six_window.ShiftingValue.place(x=200, y=230)
+        task_six_window.shift = tk.Entry(task_six_window, width=20)
+        task_six_window.shift.place(x=200, y=230)
         button = tk.Button(task_six_window, text="Shifting Signal",
-                           command=lambda: Task6("ShiftingSignal", "", task_six_window.ShiftingValue),
+                           command=lambda: Task6("ShiftingSignal", "", task_six_window.shift),
                            width=30, height=3)
         button.pack(pady=20)
         # 4) Folding Signal
@@ -360,10 +360,10 @@ class AppWindow(tk.Tk):
         task_six_window.label = tk.Label(task_six_window, text="K Steps :", font=('Arial', 12))
         task_six_window.label.place(x=100, y=420)
 
-        task_six_window.ShiftingValue = tk.Entry(task_six_window, width=20)
-        task_six_window.ShiftingValue.place(x=200, y=420)
+        task_six_window.shiftFold = tk.Entry(task_six_window, width=20)
+        task_six_window.shiftFold.place(x=200, y=420)
         button = tk.Button(task_six_window, text="Shifting Folded Signal",
-                           command=lambda: Task6("ShiftingFoldedSignal", task_six_window.Window_size, ""),
+                           command=lambda: Task6("ShiftingFoldedSignal", "", task_six_window.shiftFold),
                            width=30, height=3)
         button.pack(pady=20)
         # 6) Remove DC component
