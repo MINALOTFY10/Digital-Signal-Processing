@@ -4,29 +4,28 @@ import statistics
 from matplotlib import pyplot as plt
 
 from Task2.ArithmeticOperations import ArithmeticOperations
-from test import SignalSamplesAreEqual, Shift_Fold_Signal
+from test import SignalSamplesAreEqual, Shift_Fold_Signal, SharpeningTest
+
 from utils.FileReader import FileReader
 from utils.plotSignal import plotSignal
 
-
 class SixthTask:
     @staticmethod
-    def Smoothing(windowSizeEntry):
+    def Smoothing(window_size_entry):
         IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
-        newSignal = []
-        newIndices = []
-        for i in range(len(listOfSamples) - int(windowSizeEntry) + 1):
-            summation = 0
-            for j in range(i, i + int(windowSizeEntry)):
-                summation += listOfSamples[j]
+        new_signal = []
+        new_indices = []
+        for i in range(len(listOfSamples) - int(window_size_entry) + 1):
+            # summation of samples from i to i + w
+            summation = sum(listOfSamples[i:i + int(window_size_entry)])
+            new_signal.append(summation / int(window_size_entry))
+            new_indices.append(i)
 
-            newSignal.append(summation / int(windowSizeEntry))
-            newIndices.append(i)
-        print("new signal : ", newSignal)
-        print(len(newSignal))
+        print("new signal : ", new_signal)
+        print(len(new_signal))
 
-        # SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest1.txt", newIndices, newSignal)
-        SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest2.txt", newIndices, newSignal)
+        SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest1.txt", new_indices, new_signal)
+        # SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest2.txt", new_indices, new_signal )
 
     @staticmethod
     def Sharpening():
@@ -38,20 +37,6 @@ class SixthTask:
                        82.0, 83.0, 84.0, 85.0, 86.0, 87.0, 88.0, 89.0, 90.0, 91.0, 92.0, 93.0, 94.0, 95.0, 96.0, 97.0,
                        98.0, 99.0, 100.0]
 
-        expectedOutput_first = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        expectedOutput_second = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-        """
-        Write your Code here:
-        Start
-        """
-
         FirstDrev = []
         SecondDrev = []
         for i in range(1, len(InputSignal)):
@@ -60,36 +45,8 @@ class SixthTask:
         for i in range(1, len(InputSignal) - 1):
             SecondDrev.append(InputSignal[i + 1] - (2 * InputSignal[i]) + InputSignal[i - 1])
 
-        """
-        End
-        """
-
-        """
-        Testing your Code
-        """
-        if (len(FirstDrev) != len(expectedOutput_first)) or (len(SecondDrev) != len(expectedOutput_second)):
-            print("mismatch in length")
-            return
-        first = second = True
-        for i in range(len(expectedOutput_first)):
-            if abs(FirstDrev[i] - expectedOutput_first[i]) < 0.01:
-                continue
-            else:
-                first = False
-                print("1st derivative wrong")
-                return
-        for i in range(len(expectedOutput_second)):
-            if abs(SecondDrev[i] - expectedOutput_second[i]) < 0.01:
-                continue
-            else:
-                second = False
-                print("2nd derivative wrong")
-                return
-        if first and second:
-            print("Derivative Test case passed successfully")
-        else:
-            print("Derivative Test case failed")
-        return
+        # Testing
+        SharpeningTest(FirstDrev, SecondDrev)
 
     @staticmethod
     def Shifting(shiftingValue):
@@ -101,7 +58,6 @@ class SixthTask:
 
         FoldedList = listOfSamples[::-1]
 
-        print("Folded List : ", FoldedList)
         SignalSamplesAreEqual("Folding Signal", "utils/Output_fold.txt", indices, FoldedList)
 
     @staticmethod
