@@ -402,3 +402,39 @@ def Shift_Fold_Signal(file_name, Your_indices, Your_samples):
             print("Shift_Fold_Signal Test case failed, your signal have different values from the expected one")
             return
     print("Shift_Fold_Signal Test case passed successfully")
+
+
+############################################################################
+def SharpeningTest(FirstDrev, SecondDrev):
+    expectedOutput_first = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    expectedOutput_second = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+    if (len(FirstDrev) != len(expectedOutput_first)) or (len(SecondDrev) != len(expectedOutput_second)):
+        print("mismatch in length")
+        return
+    first = second = True
+    for i in range(len(expectedOutput_first)):
+        if abs(FirstDrev[i] - expectedOutput_first[i]) < 0.01:
+            continue
+        else:
+            first = False
+            print("1st derivative wrong")
+            return
+    for i in range(len(expectedOutput_second)):
+        if abs(SecondDrev[i] - expectedOutput_second[i]) < 0.01:
+            continue
+        else:
+            second = False
+            print("2nd derivative wrong")
+            return
+    if first and second:
+        print("Derivative Test case passed successfully")
+    else:
+        print("Derivative Test case failed")
+    return
