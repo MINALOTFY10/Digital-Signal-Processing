@@ -23,9 +23,13 @@ class SixthTask:
 
         print("new signal : ", new_signal)
         print(len(new_signal))
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
+        plotSignal(indices, listOfSamples, ax1)
+        plotSignal(new_indices, new_signal, ax2)
         SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest1.txt", new_indices, new_signal)
-        # SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest2.txt", new_indices, new_signal )
+        # SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest2.txt", new_indices, new_signal)
+        plt.show()
 
     @staticmethod
     def Sharpening():
@@ -57,8 +61,12 @@ class SixthTask:
         IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
 
         FoldedList = listOfSamples[::-1]
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
+        plotSignal(indices, listOfSamples, ax1)
+        plotSignal(indices, FoldedList, ax2)
         SignalSamplesAreEqual("Folding Signal", "utils/Output_fold.txt", indices, FoldedList)
+        plt.show()
 
     @staticmethod
     def ShiftingFoldedSignal(ShiftingValueEntry):
@@ -79,6 +87,7 @@ class SixthTask:
         plotSignal(newIndices, FoldedList, ax2)
 
         Shift_Fold_Signal("utils/Output_ShiftFoldedby-500.txt", newIndices, FoldedList)
+        # Shift_Fold_Signal("utils/Output_ShifFoldedby500.txt", newIndices, FoldedList)
         plt.show()
         # Testing
 
