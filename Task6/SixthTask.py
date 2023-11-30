@@ -10,6 +10,7 @@ from utils.FileReader import FileReader
 from utils.plotSignal import plotSignal
 
 class SixthTask:
+
     @staticmethod
     def Smoothing(window_size_entry):
         IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
@@ -21,12 +22,17 @@ class SixthTask:
             new_signal.append(summation / int(window_size_entry))
             new_indices.append(i)
 
-        print("new signal : ", new_signal)
+        print("New signal : ", new_signal)
         print(len(new_signal))
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
+        # Plotting
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+        ax1.set_title("Before Smoothing")
+        ax2.set_title("After Smoothing")
         plotSignal(indices, listOfSamples, ax1)
         plotSignal(new_indices, new_signal, ax2)
+
+        # Testing
         SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest1.txt", new_indices, new_signal)
         # SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest2.txt", new_indices, new_signal)
         plt.show()
@@ -43,11 +49,16 @@ class SixthTask:
 
         FirstDrev = []
         SecondDrev = []
+        # First Derivative X(n) - X(n-1)
         for i in range(1, len(InputSignal)):
             FirstDrev.append(InputSignal[i] - InputSignal[i - 1])
 
+        # Second Derivative X(n+1) - 2 * X(n) + X(n-1)
         for i in range(1, len(InputSignal) - 1):
             SecondDrev.append(InputSignal[i + 1] - (2 * InputSignal[i]) + InputSignal[i - 1])
+
+        print("First Derivative, ", FirstDrev)
+        print("Second Derivative, ", SecondDrev)
 
         # Testing
         SharpeningTest(FirstDrev, SecondDrev)
@@ -60,42 +71,46 @@ class SixthTask:
     def FoldingSignal():
         IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
 
+        # Invert the signal
         FoldedList = listOfSamples[::-1]
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
+        # Plotting
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
         plotSignal(indices, listOfSamples, ax1)
         plotSignal(indices, FoldedList, ax2)
+
+        # Testing
         SignalSamplesAreEqual("Folding Signal", "utils/Output_fold.txt", indices, FoldedList)
         plt.show()
 
     @staticmethod
     def ShiftingFoldedSignal(ShiftingValueEntry):
-
         IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
         newIndices = []
+
+        # Folding the Signal
         FoldedList = listOfSamples[::-1]
 
+        # Shifting the Signal
         phaseShift = int(ShiftingValueEntry.get())
-
         for i in range(len(indices)):
             newIndices.append(indices[i] + phaseShift)
 
-        print(newIndices)
+        # Plotting
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-
         plotSignal(indices, FoldedList, ax1)
         plotSignal(newIndices, FoldedList, ax2)
 
-        Shift_Fold_Signal("utils/Output_ShiftFoldedby-500.txt", newIndices, FoldedList)
-        # Shift_Fold_Signal("utils/Output_ShifFoldedby500.txt", newIndices, FoldedList)
-        plt.show()
         # Testing
+        Shift_Fold_Signal("utils/Output_ShifFoldedby500.txt", newIndices, FoldedList)
+        # Shift_Fold_Signal("utils/Output_ShiftFoldedby-500.txt", newIndices, FoldedList)
+        plt.show()
 
     @staticmethod
     def removeDcComponentFreqDomain():
         IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
 
-        # DFT
+        # Preforming DFT
         frequencies = []
         for i in range(len(listOfSamples)):
             summation = 0
@@ -109,16 +124,17 @@ class SixthTask:
 
             frequencies.append(summation)
 
-        amplitudeList = []
-        phaseShiftList = []
-
+        # Make the first sample = 0
         frequencies[0] = complex(0, 0)
 
+        # Converting the Signal from time domain to frequency domain
+        amplitudeList = []
+        phaseShiftList = []
         for i in range(len(frequencies)):
             amplitudeList.append(round(math.sqrt(frequencies[i].real ** 2 + frequencies[i].imag ** 2), 13))
             phaseShiftList.append(math.atan2(frequencies[i].imag, frequencies[i].real))
 
-        # IDFT
+        # Preforming IDFT
         indices = []
         Samples = []
         for i in range(len(amplitudeList)):
