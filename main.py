@@ -13,6 +13,7 @@ from Task3.Quantization import Quantization
 from Task4.FourthTask import FourthTask
 from Task5.FifthTask import FifthTask
 from Task6.SixthTask import SixthTask
+from Task7.SeventhTask import SeventhTask
 from test import QuantizationTest1, QuantizationTest2
 from utils.FileReader import FileReader
 
@@ -87,6 +88,11 @@ def Task6(command, windowSizeEntry, ShiftingValueEntry):
         SixthTask.ShiftingFoldedSignal(ShiftingValueEntry)
     elif command == "DCRemove":
         SixthTask.removeDcComponentFreqDomain()
+
+
+def Task7(command):
+    if command == "Convolution":
+        SeventhTask.Convolution()
 
 
 class AppWindow(tk.Tk):
@@ -372,6 +378,17 @@ class AppWindow(tk.Tk):
                            width=30, height=3)
         button.pack(pady=20)
 
+    def task_seven_window(self):
+        task_seven_window = tk.Toplevel(self)
+        task_seven_window.title("Task 6")
+        task_seven_window.geometry("900x750")
+
+        # 1) Convoluted Signal
+        button = tk.Button(task_seven_window, text="Convolution",
+                           command=lambda: Task7("Convolution"),
+                           width=30, height=3)
+        button.pack(pady=20)
+
     def create_ui_components(self):
         # A button To open Task 1 Window
         button = tk.Button(self, text="Task 1", command=self.task_one_window, width=20, height=3)
@@ -385,6 +402,8 @@ class AppWindow(tk.Tk):
         button = tk.Button(self, text="Task 5", command=self.task_five_window, width=20, height=3)
         button.pack(pady=20)
         button = tk.Button(self, text="Task 6", command=self.task_six_window, width=20, height=3)
+        button.pack(pady=20)
+        button = tk.Button(self, text="Task 7", command=self.task_seven_window, width=20, height=3)
         button.pack(pady=20)
 
 
