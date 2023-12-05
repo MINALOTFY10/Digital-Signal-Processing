@@ -1,7 +1,5 @@
 from utils.FileReader import FileReader
 
-
-#
 # def SignalSamplesAreEqual(file_name, indices, samples):
 #     expected_indices = []
 #     expected_samples = []
@@ -61,9 +59,6 @@ def AddSignalSamplesAreEqual(userFirstSignal, userSecondSignal, Your_indices, Yo
     print("Addition Test case passed successfully")
 
 
-# In[ ]:
-
-
 def SubSignalSamplesAreEqual(userFirstSignal, userSecondSignal, Your_indices, Your_samples):
     fileName = ''
     if userFirstSignal == 'Signal1.txt' and userSecondSignal == 'Signal2.txt':
@@ -89,9 +84,6 @@ def SubSignalSamplesAreEqual(userFirstSignal, userSecondSignal, Your_indices, Yo
     print("Subtraction Test case passed successfully")
 
 
-# In[ ]:
-
-
 def NormalizeSignal(MinRange, MaxRange, Your_indices, Your_samples):
     fileName = ''
     if MinRange == -1 and MaxRange == 1:
@@ -115,9 +107,6 @@ def NormalizeSignal(MinRange, MaxRange, Your_indices, Your_samples):
             print("Normalization Test case failed, your signal have different values from the expected one")
             return
     print("Normalization Test case passed successfully")
-
-
-# In[ ]:
 
 
 def MultiplySignalByConst(User_Const, Your_indices, Your_samples):
@@ -150,8 +139,6 @@ def MultiplySignalByConst(User_Const, Your_indices, Your_samples):
     print("Multiply by " + str(User_Const) + " Test case passed successfully")
 
 
-# In[ ]:
-
 def ShiftSignalByConst(Shift_value, Your_indices, Your_samples):
     global file_name
     if Shift_value == 500:
@@ -179,9 +166,6 @@ def ShiftSignalByConst(Shift_value, Your_indices, Your_samples):
                 "Shift by " + Shift_value.str() + " Test case failed, your signal have different values from the expected one")
             return
     print("Shift by " + str(Shift_value) + " Test case passed successfully")
-
-
-# In[ ]:
 
 
 # use this twice one for Accumlation and one for Squaring
@@ -223,7 +207,6 @@ def SignalSamplesAreEqual(TaskName, file_name, Your_indices, Your_samples):
     print(TaskName + " Test case passed successfully")
 
 
-####################################################################################################################
 def QuantizationTest1(file_name, Your_EncodedValues, Your_QuantizedValues):
     expectedEncodedValues = []
     expectedQuantizedValues = []
@@ -321,9 +304,6 @@ def QuantizationTest2(file_name, Your_IntervalIndices, Your_EncodedValues, Your_
     print("QuantizationTest2 Test case passed successfully")
 
 
-import math
-
-
 # Use to test the Amplitude of DFT and IDFT
 def SignalComapreAmplitude(SignalInput=[], SignalOutput=[]):
     if len(SignalInput) != len(SignalInput):
@@ -340,11 +320,6 @@ def SignalComapreAmplitude(SignalInput=[], SignalOutput=[]):
                 return False
         return True
 
-
-# def RoundPhaseShift(P):
-#     while P<0:
-#         p+=2*math.pi
-#     return float(P%(2*math.pi))
 
 # Use to test the PhaseShift of DFT
 def SignalComaprePhaseShift(SignalInput=[], SignalOutput=[]):
@@ -364,7 +339,6 @@ def SignalComaprePhaseShift(SignalInput=[], SignalOutput=[]):
         return True
 
 
-############################################################################
 def Shift_Fold_Signal(file_name, Your_indices, Your_samples):
     expected_indices = []
     expected_samples = []
@@ -404,7 +378,6 @@ def Shift_Fold_Signal(file_name, Your_indices, Your_samples):
     print("Shift_Fold_Signal Test case passed successfully")
 
 
-############################################################################
 def SharpeningTest(FirstDrev, SecondDrev):
     expectedOutput_first = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -438,3 +411,32 @@ def SharpeningTest(FirstDrev, SecondDrev):
     else:
         print("Derivative Test case failed")
     return
+
+
+def ConvTest(Your_indices, Your_samples):
+    """
+    Test inputs
+    InputIndicesSignal1 =[-2, -1, 0, 1]
+    InputSamplesSignal1 = [1, 2, 1, 1 ]  mx=3
+
+    InputIndicesSignal2=[0, 1, 2, 3, 4, 5 ]
+    InputSamplesSignal2 = [ 1, -1, 0, 0, 1, 1 ]  mx= 5
+    """
+
+    expected_indices = [-2, -1, 0, 1, 2, 3, 4, 5, 6]
+    expected_samples = [1, 1, -1, 0, 0, 3, 3, 2, 1]
+
+    if (len(expected_samples) != len(Your_samples)) and (len(expected_indices) != len(Your_indices)):
+        print("Conv Test case failed, your signal have different length from the expected one")
+        return
+    for i in range(len(Your_indices)):
+        if Your_indices[i] != expected_indices[i]:
+            print("Conv Test case failed, your signal have different indicies from the expected one")
+            return
+    for i in range(len(expected_samples)):
+        if abs(Your_samples[i] - expected_samples[i]) < 0.01:
+            continue
+        else:
+            print("Conv Test case failed, your signal have different values from the expected one")
+            return
+    print("Conv Test case passed successfully")
