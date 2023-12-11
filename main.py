@@ -14,6 +14,7 @@ from Task4.FourthTask import FourthTask
 from Task5.FifthTask import FifthTask
 from Task6.SixthTask import SixthTask
 from Task7.SeventhTask import SeventhTask
+from Task8.EighthTask import EighthTask
 from test import QuantizationTest1, QuantizationTest2
 from utils.FileReader import FileReader
 
@@ -93,6 +94,10 @@ def Task6(command, windowSizeEntry, ShiftingValueEntry):
 def Task7(command):
     if command == "Convolution":
         SeventhTask.Convolution()
+
+def Task8(command):
+    if command == "Correlation":
+        EighthTask.Correlation()
 
 
 class AppWindow(tk.Tk):
@@ -380,12 +385,23 @@ class AppWindow(tk.Tk):
 
     def task_seven_window(self):
         task_seven_window = tk.Toplevel(self)
-        task_seven_window.title("Task 6")
+        task_seven_window.title("Task 7")
         task_seven_window.geometry("900x750")
 
         # 1) Convoluted Signal
         button = tk.Button(task_seven_window, text="Convolution",
                            command=lambda: Task7("Convolution"),
+                           width=30, height=3)
+        button.pack(pady=20)
+
+    def task_eight_window(self):
+        task_seven_window = tk.Toplevel(self)
+        task_seven_window.title("Task 8")
+        task_seven_window.geometry("900x750")
+
+        # 1) Convoluted Signal
+        button = tk.Button(task_seven_window, text="Correlation",
+                           command=lambda: Task8("Correlation"),
                            width=30, height=3)
         button.pack(pady=20)
 
@@ -404,6 +420,8 @@ class AppWindow(tk.Tk):
         button = tk.Button(self, text="Task 6", command=self.task_six_window, width=20, height=3)
         button.pack(pady=20)
         button = tk.Button(self, text="Task 7", command=self.task_seven_window, width=20, height=3)
+        button.pack(pady=20)
+        button = tk.Button(self, text="Task 8", command=self.task_eight_window, width=20, height=3)
         button.pack(pady=20)
 
 

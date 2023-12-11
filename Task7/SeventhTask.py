@@ -1,5 +1,8 @@
+from matplotlib import pyplot as plt
+
 from test import ConvTest
 from utils.FileReader import FileReader
+from utils.plotSignal import plotSignal
 
 
 class SeventhTask:
@@ -7,7 +10,6 @@ class SeventhTask:
     @staticmethod
     def Convolution():
         IsPeriodic1, signalType1, noOfSample1, indices1, x = FileReader.browse_signal_file()
-
         IsPeriodic2, signalType2, noOfSample2, indices2, h = FileReader.browse_signal_file()
 
         min_index = int(indices1[0] + indices2[0])
@@ -37,3 +39,9 @@ class SeventhTask:
         print("Output samples: ", samples_output)
         ConvTest(indices_output, samples_output)
 
+        #Plotting
+        fig, (ax1) = plt.subplots(1, 1, figsize=(12, 5))
+        ax1.set_title("Convolution")
+        plotSignal(indices_output, samples_output, ax1)
+
+        plt.show()
