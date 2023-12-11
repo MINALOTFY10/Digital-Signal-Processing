@@ -399,7 +399,7 @@ class AppWindow(tk.Tk):
         task_seven_window.title("Task 8")
         task_seven_window.geometry("900x750")
 
-        # 1) Convoluted Signal
+        # 1) Correlated Signal
         button = tk.Button(task_seven_window, text="Correlation",
                            command=lambda: Task8("Correlation"),
                            width=30, height=3)
