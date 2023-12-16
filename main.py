@@ -4,6 +4,7 @@ import tkinter as tk
 import matplotlib.pyplot as plt
 from decimal import Decimal
 
+from Practical_Task.Ninth_task import NinthTask
 from Task1.DiscreteContinuousSignalDisplayer import DiscreteContinuousSignalDisplayer
 from Task1.SinCosSignalGenerator import SinCosSignalGenerator
 # from Task2 import ArithmeticOperations
@@ -95,9 +96,17 @@ def Task7(command):
     if command == "Convolution":
         SeventhTask.Convolution()
 
+
 def Task8(command):
     if command == "Correlation":
         EighthTask.Correlation()
+
+def Task9(command):
+    if command == "Fast Correlation":
+        NinthTask.FastCorrelation()
+    elif command == "Fast Convolution":
+        NinthTask.FastConvolution()
+
 
 
 class AppWindow(tk.Tk):
@@ -405,6 +414,21 @@ class AppWindow(tk.Tk):
                            width=30, height=3)
         button.pack(pady=20)
 
+    def task_nine_window(self):
+        task_nine_window = tk.Toplevel(self)
+        task_nine_window.title("Task 8")
+        task_nine_window.geometry("900x750")
+
+        # 1) Fast Correlation Signal
+        button = tk.Button(task_nine_window, text="Fast Correlation",
+                           command=lambda: Task9("Fast Correlation"),
+                           width=30, height=3)
+        # 2) Fast Convolution Signal
+        button = tk.Button(task_nine_window, text="Fast Convolution",
+                           command=lambda: Task9("Fast Convolution"),
+                           width=30, height=3)
+        button.pack(pady=20)
+
     def create_ui_components(self):
         # A button To open Task 1 Window
         button = tk.Button(self, text="Task 1", command=self.task_one_window, width=20, height=3)
@@ -421,7 +445,8 @@ class AppWindow(tk.Tk):
         button.pack(pady=20)
         button = tk.Button(self, text="Task 7", command=self.task_seven_window, width=20, height=3)
         button.pack(pady=20)
-        button = tk.Button(self, text="Task 8", command=self.task_eight_window, width=20, height=3)
+
+        button = tk.Button(self, text="Task 9", command=self.task_nine_window, width=20, height=3)
         button.pack(pady=20)
 
 
