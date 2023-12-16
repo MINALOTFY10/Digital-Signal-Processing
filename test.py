@@ -305,7 +305,7 @@ def QuantizationTest2(file_name, Your_IntervalIndices, Your_EncodedValues, Your_
     print("QuantizationTest2 Test case passed successfully")
 
 
-# Use to test the Amplitude of DFT and IDFT
+# Use to test the Amplitude of Dft_idft
 def SignalComapreAmplitude(SignalInput=[], SignalOutput=[]):
     if len(SignalInput) != len(SignalInput):
         return False
