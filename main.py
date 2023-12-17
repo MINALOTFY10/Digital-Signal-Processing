@@ -101,12 +101,14 @@ def Task8(command):
     if command == "Correlation":
         EighthTask.Correlation()
 
+
 def Task9(command):
-    if command == "Fast Correlation":
-        NinthTask.FastCorrelation()
+    if command == "Fast Auto Correlation":
+        NinthTask.FastAutoCorrelation()
+    elif command == "Fast Cross Correlation":
+        NinthTask.FastCrossCorrelation()
     elif command == "Fast Convolution":
         NinthTask.FastConvolution()
-
 
 
 class AppWindow(tk.Tk):
@@ -419,14 +421,23 @@ class AppWindow(tk.Tk):
         task_nine_window.title("Task 8")
         task_nine_window.geometry("900x750")
 
-        # 1) Fast Correlation Signal
-        button = tk.Button(task_nine_window, text="Fast Correlation",
-                           command=lambda: Task9("Fast Correlation"),
-                           width=30, height=3)
-        # 2) Fast Convolution Signal
+        # 1) Fast Convolution Signal
         button = tk.Button(task_nine_window, text="Fast Convolution",
                            command=lambda: Task9("Fast Convolution"),
                            width=30, height=3)
+        button.pack(pady=20)
+
+        # 2) Fast Auto Correlation Signal
+        button = tk.Button(task_nine_window, text="Fast Auto Correlation",
+                           command=lambda: Task9("Fast Auto Correlation"),
+                           width=30, height=3)
+        button.pack(pady=20)
+
+        # 3) Fast Cross Correlation Signal
+        button = tk.Button(task_nine_window, text="Fast Cross Correlation",
+                           command=lambda: Task9("Fast Cross Correlation"),
+                           width=30, height=3)
+
         button.pack(pady=20)
 
     def create_ui_components(self):
@@ -445,7 +456,6 @@ class AppWindow(tk.Tk):
         button.pack(pady=20)
         button = tk.Button(self, text="Task 7", command=self.task_seven_window, width=20, height=3)
         button.pack(pady=20)
-
         button = tk.Button(self, text="Task 9", command=self.task_nine_window, width=20, height=3)
         button.pack(pady=20)
 

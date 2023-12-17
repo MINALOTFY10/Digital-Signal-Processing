@@ -17,7 +17,7 @@ class DftIdft:
 
             frequencies.append(summation)
 
-        return  frequencies
+        return frequencies
 
 
     @staticmethod
@@ -43,4 +43,4 @@ class DftIdft:
             indices.append(i)
             Samples.append(round(summation.real))
 
-        return  indices, Samples
+        return indices, Samples

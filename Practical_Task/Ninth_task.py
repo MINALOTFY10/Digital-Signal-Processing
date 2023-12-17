@@ -16,10 +16,10 @@ class NinthTask:
         IsPeriodic2, signalType2, noOfSample2, indices2, listOfSamples2 = FileReader.browse_signal_file()
 
         # Padding the Signals
-        padd = int(noOfSample1) + int(noOfSample2) - 1
+        padding = int(noOfSample1) + int(noOfSample2) - 1
 
-        pad_len1 = padd - int(noOfSample1)
-        pad_len2 = padd - int(noOfSample2)
+        pad_len1 = padding - int(noOfSample1)
+        pad_len2 = padding - int(noOfSample2)
 
         # Pad the signals
         listOfSamples1 = listOfSamples1 + [0] * pad_len1
@@ -39,7 +39,6 @@ class NinthTask:
             amplitudeList.append(round(math.sqrt(outputFrequency[i].real ** 2 + outputFrequency[i].imag ** 2), 13))
             phaseShiftList.append(math.atan2(outputFrequency[i].imag, outputFrequency[i].real))
 
-
         indices, Samples = DftIdft.Idft(amplitudeList, phaseShiftList)
 
         # Testing
@@ -47,73 +46,79 @@ class NinthTask:
         print("Samples: ", Samples)
         ConvTest(indices, Samples)
 
-    # @staticmethod
-    # def FastConvolution():
-    #     IsPeriodic1, signalType1, noOfSample1, indices1, listOfSamples1 = FileReader.browse_signal_file()
-    #     IsPeriodic2, signalType2, noOfSample2, indices2, listOfSamples2 = FileReader.browse_signal_file()
-    #
-    #     # Padding the Signals
-    #     padd = int(noOfSample1) + int(noOfSample2) - 1
-    #
-    #     pad_len1 = padd - int(noOfSample1)
-    #     pad_len2 = padd - int(noOfSample2)
-    #
-    #     # Pad the signals
-    #     listOfSamples1 = listOfSamples1 + [0] * pad_len1
-    #     listOfSamples2 = listOfSamples2 + [0] * pad_len2
-    #
-    #     amplitudeList1, phaseShiftList1 = DftIdft.Dft(listOfSamples1)
-    #     amplitudeList2, phaseShiftList2 = DftIdft.Dft(listOfSamples2)
-    #
-    #     outputAmplitude = []
-    #     outputPhaseShift = []
-    #     for i in range(len(amplitudeList1)):
-    #         outputAmplitude.append(amplitudeList1[i] * amplitudeList2[i])
-    #         outputPhaseShift.append(phaseShiftList1[i] * phaseShiftList2[i])
-    #
-    #     indices, Samples = DftIdft.Idft(outputAmplitude, outputPhaseShift)
-    #
-    #     # Testing
-    #     print("indices: ", indices)
-    #     print("Samples: ", Samples)
-    #     ConvTest(indices, Samples)
-
     @staticmethod
-    def FastCorrelation():
-        noOfSample1, indicesList1, samplesList1 = FileReader.browse_signal_file()
-        noOfSample2, indicesList2, samplesList2 = FileReader.browse_signal_file()
-        indices_output = []
-        samples_output = []
+    def FastAutoCorrelation():
+        no_of_sample, indices_list, samples_list = FileReader.browse_signal_file()
 
-        # To solve denominator
-        summationSquaresOfSamples1 = sum([x ** 2 for x in samplesList1])
-        summationSquaresOfSamples2 = sum([x ** 2 for x in samplesList2])
-        denominatorEquation = ((summationSquaresOfSamples1 * summationSquaresOfSamples2) ** 0.5) / int(noOfSample1)
+        # Apply DFT
+        frequencies_list = DftIdft.Dft(samples_list)
 
-        # To solve numerator
-        for i in range(int(noOfSample1)):
-            if i != 0:
-                samplesList2.append(samplesList2.pop(0))
+        # Find conjugation
+        conjugate_list = [num.conjugate() for num in frequencies_list]
 
-            summation = 0
-            for j in range(int(noOfSample1)):
-                summation += samplesList1[j] * samplesList2[j]
+        # Elements multiplication
+        output_frequency = []
+        for i in range(len(frequencies_list)):
+            output_frequency.append(frequencies_list[i] * conjugate_list[i])
 
-            r = int(summation) / int(noOfSample1)
+        amplitudeList = []
+        phaseShiftList = []
+        for i in range(len(output_frequency)):
+            amplitudeList.append(round(math.sqrt(output_frequency[i].real ** 2 + output_frequency[i].imag ** 2), 13))
+            phaseShiftList.append(math.atan2(output_frequency[i].imag, output_frequency[i].real))
 
-            # Final Output List
-            indices_output.append(i)
-            samples_output.append(round(r / denominatorEquation, 8))
+        # Apply IDFT
+        indices, samples = DftIdft.Idft(amplitudeList, phaseShiftList)
+
+        # Divide Samples by N
+        output_samples = [(1 / len(samples)) * float(sample) for sample in samples]
 
         # Testing
-        print("Output indices: ", indices_output)
-        print("Output samples: ", samples_output)
-        Compare_Signals("test/CorrOutput.txt", indices_output, samples_output)
+        print("Indices: ", indices_list)
+        print("Samples: ", output_samples)
 
         # Plotting
         fig, (ax1) = plt.subplots(1, 1, figsize=(12, 5))
-        ax1.set_title("Correlation")
-        plotSignal(indices_output, samples_output, ax1)
+        ax1.set_title("Fast Cross Correlation")
+        plotSignal(indices_list, output_samples, ax1)
 
         plt.show()
 
+    @staticmethod
+    def FastCrossCorrelation():
+        no_of_sample1, indices_list1, samples_list1 = FileReader.browse_signal_file()
+        no_of_sample2, indices_list2, samples_list2 = FileReader.browse_signal_file()
+
+        # Apply DFT
+        frequencies_list1 = DftIdft.Dft(samples_list1)
+        frequencies_list2 = DftIdft.Dft(samples_list2)
+
+        # Find conjugation
+        conjugate_list = [num.conjugate() for num in frequencies_list1]
+
+        # Elements multiplication
+        output_frequency = []
+        for i in range(len(frequencies_list1)):
+            output_frequency.append(conjugate_list[i] * frequencies_list2[i])
+
+        amplitudeList = []
+        phaseShiftList = []
+        for i in range(len(output_frequency)):
+            amplitudeList.append(round(math.sqrt(output_frequency[i].real ** 2 + output_frequency[i].imag ** 2), 13))
+            phaseShiftList.append(math.atan2(output_frequency[i].imag, output_frequency[i].real))
+
+        # Apply IDFT
+        indices, samples = DftIdft.Idft(amplitudeList, phaseShiftList)
+
+        # Divide Samples by N
+        output_samples = [round((1 / len(samples)) * float(sample), 6) for sample in samples]
+
+        # Testing
+        print("Output samples: ", output_samples)
+        Compare_Signals("test/Corr_Output.txt", indices_list1, output_samples)
+
+        # Plotting
+        fig, (ax1) = plt.subplots(1, 1, figsize=(12, 5))
+        ax1.set_title("Fast Cross Correlation")
+        plotSignal(indices_list1, output_samples, ax1)
+        plt.show()
