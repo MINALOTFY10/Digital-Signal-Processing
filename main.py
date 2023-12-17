@@ -443,21 +443,23 @@ class AppWindow(tk.Tk):
     def create_ui_components(self):
         # A button To open Task 1 Window
         button = tk.Button(self, text="Task 1", command=self.task_one_window, width=20, height=3)
-        button.pack(pady=20)
+        button.pack(pady=15)
         button = tk.Button(self, text="Task 2", command=self.task_two_window, width=20, height=3)
-        button.pack(pady=20)
+        button.pack(pady=15)
         button = tk.Button(self, text="Task 3", command=self.task_three_window, width=20, height=3)
-        button.pack(pady=20)
+        button.pack(pady=15)
         button = tk.Button(self, text="Task 4", command=self.task_four_window, width=20, height=3)
-        button.pack(pady=20)
+        button.pack(pady=15)
         button = tk.Button(self, text="Task 5", command=self.task_five_window, width=20, height=3)
-        button.pack(pady=20)
+        button.pack(pady=15)
         button = tk.Button(self, text="Task 6", command=self.task_six_window, width=20, height=3)
-        button.pack(pady=20)
+        button.pack(pady=15)
         button = tk.Button(self, text="Task 7", command=self.task_seven_window, width=20, height=3)
-        button.pack(pady=20)
+        button.pack(pady=15)
+        button = tk.Button(self, text="Task 8", command=self.task_eight_window, width=20, height=3)
+        button.pack(pady=15)
         button = tk.Button(self, text="Task 9", command=self.task_nine_window, width=20, height=3)
-        button.pack(pady=20)
+        button.pack(pady=15)
 
 
 if __name__ == '__main__':
