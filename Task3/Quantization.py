@@ -82,5 +82,5 @@ class Quantization:
         print(error)
 
         # Testing
-        # QuantizationTest1("test/Test_Task3/Test 1/Quan1_Out.txt", encoding, quantized)
-        QuantizationTest2("test/Test_Task3/Test 2/Quan2_Out.txt", interval_index, encoding, quantized, error)
+        QuantizationTest1("test/Test_Task3/Test 1/Quan1_Out.txt", encoding, quantized)
+        # QuantizationTest2("test/Test_Task3/Test 2/Quan2_Out.txt", interval_index, encoding, quantized, error)

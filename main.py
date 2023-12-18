@@ -118,7 +118,7 @@ class AppWindow(tk.Tk):
         self.sampling_entry = None
         self.freq_entry = None
         self.amp_entry = None
-        self.geometry('900x750')
+        self.geometry('900x800')
         self.title("DSP")
         self.configure(bg='lightgrey')
         self.font_style = ("Arial", 12)
@@ -406,19 +406,19 @@ class AppWindow(tk.Tk):
         button.pack(pady=20)
 
     def task_eight_window(self):
-        task_seven_window = tk.Toplevel(self)
-        task_seven_window.title("Task 8")
-        task_seven_window.geometry("900x750")
+        task_eight_window = tk.Toplevel(self)
+        task_eight_window.title("Task 8")
+        task_eight_window.geometry("900x750")
 
         # 1) Correlated Signal
-        button = tk.Button(task_seven_window, text="Correlation",
+        button = tk.Button(task_eight_window, text="Correlation",
                            command=lambda: Task8("Correlation"),
                            width=30, height=3)
         button.pack(pady=20)
 
     def task_nine_window(self):
         task_nine_window = tk.Toplevel(self)
-        task_nine_window.title("Task 8")
+        task_nine_window.title("Task 9")
         task_nine_window.geometry("900x750")
 
         # 1) Fast Convolution Signal

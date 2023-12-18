@@ -38,7 +38,8 @@ class ArithmeticOperations:
             plotSignal(x, signals[i][4], axs[i])
         plotSignal(x, resultSignal, axs[-1])
         # Testing
-        AddSignalSamplesAreEqual('Signal1.txt', 'Signal2.txt', x, resultSignal)
+        # AddSignalSamplesAreEqual('Signal1.txt', 'Signal2.txt', x, resultSignal)
+        AddSignalSamplesAreEqual('Signal1.txt', 'signal3.txt', x, resultSignal)
         # SignalSamplesAreEqual("test/Signal1+signal2.txt", x, resultSignal)
         plt.show()
 
