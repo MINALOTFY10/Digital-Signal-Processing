@@ -34,8 +34,8 @@ class SixthTask:
         plotSignal(new_indices, new_signal, ax2)
 
         # Testing
-        # SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest1.txt", new_indices, new_signal)
-        SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest2.txt", new_indices, new_signal)
+        SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest1.txt", new_indices, new_signal)
+        # SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest2.txt", new_indices, new_signal)
         plt.show()
 
     @staticmethod
@@ -113,8 +113,8 @@ class SixthTask:
         plotSignal(newIndices, FoldedList, ax2)
 
         # Testing
-        # Shift_Fold_Signal("utils/Output_ShifFoldedby500.txt", newIndices, FoldedList)
-        Shift_Fold_Signal("utils/Output_ShiftFoldedby-500.txt", newIndices, FoldedList)
+        Shift_Fold_Signal("utils/Output_ShifFoldedby500.txt", newIndices, FoldedList)
+        # Shift_Fold_Signal("utils/Output_ShiftFoldedby-500.txt", newIndices, FoldedList)
         plt.show()
 
     @staticmethod
