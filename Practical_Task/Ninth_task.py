@@ -41,10 +41,19 @@ class NinthTask:
 
         indices, Samples = DftIdft.Idft(amplitudeList, phaseShiftList)
 
+        min_index = int(indices1[0] + indices2[0])
+        max_index = int(indices1[int(noOfSample1) - 1] + indices2[int(noOfSample2) - 1])
+
+        indices_output = []
+
+        # Computing the indices
+        for n in range(min_index, max_index + 1):
+            indices_output.append(int(n))
+
         # Testing
-        print("indices: ", indices)
+        print("indices: ", indices_output)
         print("Samples: ", Samples)
-        ConvTest(indices, Samples)
+        ConvTest(indices_output, Samples)
 
     @staticmethod
     def FastAutoCorrelation():
