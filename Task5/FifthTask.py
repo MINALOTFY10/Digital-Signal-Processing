@@ -3,7 +3,8 @@ import statistics
 
 from Task4.FourthTask import FourthTask
 from test import SignalSamplesAreEqual
-from utils.FileReader import FileReader
+from utils.GlobalFunctions.FileReader import FileReader
+from utils.GlobalFunctions.SaveInTxtFileInPolarForm import SaveInTxtFileInPolarForm
 
 
 class FifthTask:
@@ -37,23 +38,17 @@ class FifthTask:
             newSamples.append(frequencies[i])
             newIndices.append(0)
 
-        FourthTask.SaveInTxtFileInPolarForm(IsPeriodic, 1, coefficients, newIndices, newSamples, "DCT m coefficients Output.txt")
+        SaveInTxtFileInPolarForm(IsPeriodic, 1, coefficients, newIndices, newSamples, "DCT m coefficients Output.txt")
 
-        # Testing
-        print("DCT Output")
-        print(frequencies)
-        print("Test Output")
-        print(listOfSamplesTest)
-
-        SignalSamplesAreEqual("DCT", "utils/DCT_output.txt", DCTIndices, frequencies)
+        SignalSamplesAreEqual("DCT", "TestCases/Task5/DCT/DCT_output.txt", DCTIndices, frequencies)
 
     @staticmethod
-    def RemoveDcComponent():
+    def RemoveDcComponentTimeDomain():
         IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
 
         listOfSamples_Mean = statistics.mean(listOfSamples)
         for i in range(len(listOfSamples)):
             listOfSamples[i] = round(listOfSamples[i] - listOfSamples_Mean, 3)
 
-        print(listOfSamples)
-        SignalSamplesAreEqual("DC Remover", "utils/DC_component_output.txt", indices, listOfSamples)
+        SignalSamplesAreEqual("DC Remover", "TestCases/Task5/Remove DC component/DC_component_output.txt", indices,
+                              listOfSamples)

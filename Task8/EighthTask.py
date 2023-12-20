@@ -1,14 +1,14 @@
 from matplotlib import pyplot as plt
 
-from test import ConvTest, Compare_Signals
-from utils.FileReader import FileReader
-from utils.plotSignal import plotSignal
+from test import Compare_Signals
+from utils.GlobalFunctions.FileReader import FileReader
+from utils.GlobalFunctions.plotSignal import plotSignal
 
 
 class EighthTask:
 
     @staticmethod
-    def Correlation():
+    def NormalizedCrossCorrelation():
         noOfSample1, indicesList1, samplesList1 = FileReader.browse_signal_file()
         noOfSample2, indicesList2, samplesList2 = FileReader.browse_signal_file()
         indices_output = []
@@ -35,13 +35,9 @@ class EighthTask:
             samples_output.append(round(r / denominatorEquation, 8))
 
         # Testing
-        print("Output indices: ", indices_output)
-        print("Output samples: ", samples_output)
         Compare_Signals("test/CorrOutput.txt", indices_output, samples_output)
 
         # Plotting
         fig, (ax1) = plt.subplots(1, 1, figsize=(12, 5))
-        ax1.set_title("Correlation")
-        plotSignal(indices_output, samples_output, ax1)
-
+        plotSignal(indices_output, samples_output, "Correlation", ax1)
         plt.show()

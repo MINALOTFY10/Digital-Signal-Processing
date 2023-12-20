@@ -1,9 +1,9 @@
 from matplotlib import pyplot as plt
 
-from utils.FileReader import FileReader
 from test import AddSignalSamplesAreEqual, SubSignalSamplesAreEqual, MultiplySignalByConst, SignalSamplesAreEqual, \
     ShiftSignalByConst, NormalizeSignal
-from utils.plotSignal import plotSignal
+from utils.GlobalFunctions.FileReader import FileReader
+from utils.GlobalFunctions.plotSignal import plotSignal
 
 
 class ArithmeticOperations:
@@ -18,7 +18,7 @@ class ArithmeticOperations:
             # check the max size of the signals
             max_samples = max(max_samples, int(noOfSample))
 
-        # adjust signal sizes
+        # adjust signal sizes to be the same
         for signal in signals:
             # check if the size of listOfSamples less than size max_samples put zeros to make the signals equal
             if len(signal[4]) < max_samples:
@@ -35,12 +35,12 @@ class ArithmeticOperations:
         fig, axs = plt.subplots(1, len(signals) + 1, figsize=(12, 5))
         x = list(range(max_samples))
         for i in range(len(signals)):
-            plotSignal(x, signals[i][4], axs[i])
-        plotSignal(x, resultSignal, axs[-1])
+            plotSignal(x, signals[i][4], f"Signal {i + 1}", axs[i])
+        plotSignal(x, resultSignal, "Result", axs[-1])
+
         # Testing
-        # AddSignalSamplesAreEqual('Signal1.txt', 'Signal2.txt', x, resultSignal)
-        AddSignalSamplesAreEqual('Signal1.txt', 'signal3.txt', x, resultSignal)
-        # SignalSamplesAreEqual("test/Signal1+signal2.txt", x, resultSignal)
+        AddSignalSamplesAreEqual('Signal1.txt', 'Signal2.txt', x, resultSignal)
+        # AddSignalSamplesAreEqual('Signal1.txt', 'signal3.txt', x, resultSignal)
         plt.show()
 
     @staticmethod
@@ -77,13 +77,13 @@ class ArithmeticOperations:
         fig, axs = plt.subplots(1, len(signals) + 1, figsize=(12, 5))
         x = list(range(max_samples))
         for i in range(len(signals)):
-            plotSignal(x, signals[i][4], axs[i])
-        plotSignal(x, resultSignal, axs[-1])
-        # Testing
-        # SubSignalSamplesAreEqual('Signal1.txt', 'Signal2.txt', x, resultSignal)
-        SubSignalSamplesAreEqual('Signal1.txt', 'signal3.txt', x, resultSignal)
-        plt.show()
+            plotSignal(x, signals[i][4], f"Signal {i + 1}", axs[i])
+        plotSignal(x, resultSignal, "Result", axs[-1])
 
+        # Testing
+        SubSignalSamplesAreEqual('Signal1.txt', 'Signal2.txt', x, resultSignal)
+        # SubSignalSamplesAreEqual('Signal1.txt', 'signal3.txt', x, resultSignal)
+        plt.show()
 
     @staticmethod
     def multiplication(entry):
@@ -93,10 +93,11 @@ class ArithmeticOperations:
         for i in range(len(listOfSamples1)):
             resultSignal.append(int(listOfSamples1[i]) * int(entry.get()))
 
+        # Plotting
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+        plotSignal(indices1, listOfSamples1, "Original Signal", ax1)
+        plotSignal(indices1, resultSignal, "Result", ax2)
 
-        plotSignal(indices1, listOfSamples1, ax1)
-        plotSignal(indices1, resultSignal, ax2)
         # Testing
         MultiplySignalByConst(int(entry.get()), indices1, resultSignal)
         plt.show()
@@ -109,10 +110,10 @@ class ArithmeticOperations:
         for i in range(len(listOfSamples1)):
             resultSignal.append(int(listOfSamples1[i]) * int(listOfSamples1[i]))
 
+        # Plotting
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-
-        plotSignal(indices1, listOfSamples1, ax1)
-        plotSignal(indices1, resultSignal, ax2)
+        plotSignal(indices1, listOfSamples1, "Original Signal", ax1)
+        plotSignal(indices1, resultSignal, "Result", ax2)
         # Testing
         SignalSamplesAreEqual("SQU", 'test/Output squaring signal 1.txt', indices1, resultSignal)
         plt.show()
@@ -122,19 +123,15 @@ class ArithmeticOperations:
         # read one file
         signalType1, IsPeriodic1, noOfSample1, indices1, listOfSamples1 = FileReader.browse_signal_file()
         resultSignal = []
-        phaseShift = 0
-
         phaseShift = int(entry.get()) * -1
 
-        print(phaseShift)
         for i in range(len(indices1)):
             resultSignal.append(indices1[i] + phaseShift)
 
-        print(resultSignal)
+        # Plotting
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-
-        plotSignal(indices1, listOfSamples1, ax1)
-        plotSignal(resultSignal, listOfSamples1, ax2)
+        plotSignal(indices1, listOfSamples1, "Original Signal", ax1)
+        plotSignal(resultSignal, listOfSamples1, "Result", ax2)
 
         # Testing
         ShiftSignalByConst(int(entry.get()), resultSignal, listOfSamples1)
@@ -153,11 +150,12 @@ class ArithmeticOperations:
                                   int(maxEntry.get()) - int(minEntry.get())) + int(minEntry.get())
             resultSignal.append(scaled_data)
 
-        print(resultSignal)
+        # Plotting
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-        plotSignal(indices1, listOfSamples1, ax1)
-        plotSignal(indices1, resultSignal, ax2)
-        # Testing (-1,1 Signal1) (0, 1 Signal2)
+        plotSignal(indices1, listOfSamples1, "Original Signal", ax1)
+        plotSignal(indices1, resultSignal, "Result", ax2)
+
+        # Testing
         NormalizeSignal(int(minEntry.get()), int(maxEntry.get()), indices1, resultSignal)
         plt.show()
 
@@ -172,11 +170,11 @@ class ArithmeticOperations:
             resultSignal.append(int(listOfSamples1[i]) + summation)
             summation += int(listOfSamples1[i])
 
-        print(resultSignal)
+        # Plotting
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+        plotSignal(indices1, listOfSamples1, "Original Signal", ax1)
+        plotSignal(indices1, resultSignal, "Result", ax2)
 
-        plotSignal(indices1, listOfSamples1, ax1)
-        plotSignal(indices1, resultSignal, ax2)
         # Testing
-        SignalSamplesAreEqual("ACC", 'test/output accumulation for signal1.txt', indices1, resultSignal)
+        SignalSamplesAreEqual("ACC", 'TestCases/Task2/output accumulation for signal1.txt', indices1, resultSignal)
         plt.show()

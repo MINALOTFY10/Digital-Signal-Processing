@@ -1,4 +1,4 @@
-from utils.FileReader import FileReader
+from utils.GlobalFunctions.FileReader import FileReader
 
 
 def SignalSamplesAreEqual1(file_name, indices, samples):
@@ -40,9 +40,9 @@ def SignalSamplesAreEqual1(file_name, indices, samples):
 def AddSignalSamplesAreEqual(userFirstSignal, userSecondSignal, Your_indices, Your_samples):
     fileName = ''
     if userFirstSignal == 'Signal1.txt' and userSecondSignal == 'Signal2.txt':
-        fileName = "test/Signal1+signal2.txt"  # write here path of signal1+signal2
+        fileName = "TestCases/Task2/Signal1+signal2.txt"  # write here path of signal1+signal2
     elif userFirstSignal == 'Signal1.txt' and userSecondSignal == 'signal3.txt':
-        fileName = "test/signal1+signal3.txt"  # write here path of signal1+signal3
+        fileName = "TestCases/Task2/signal1+signal3.txt"  # write here path of signal1+signal3
     x, y, z, expected_indices, expected_samples = FileReader.processing_signal(fileName)
     if (len(expected_samples) != len(Your_samples)) and (len(expected_indices) != len(Your_indices)):
         print("Addition Test case failed, your signal have different length from the expected one")
@@ -63,9 +63,9 @@ def AddSignalSamplesAreEqual(userFirstSignal, userSecondSignal, Your_indices, Yo
 def SubSignalSamplesAreEqual(userFirstSignal, userSecondSignal, Your_indices, Your_samples):
     fileName = ''
     if userFirstSignal == 'Signal1.txt' and userSecondSignal == 'Signal2.txt':
-        fileName = "test/signal1-signal2.txt"  # write here path of signal1-signal2
+        fileName = "TestCases/Task2/signal1-signal2.txt"  # write here path of signal1-signal2
     elif userFirstSignal == 'Signal1.txt' and userSecondSignal == 'signal3.txt':
-        fileName = "test/signal1-signal3.txt"  # write here path of signal1-signal3
+        fileName = "TestCases/Task2/signal1-signal3.txt"  # write here path of signal1-signal3
 
     x, y, z, expected_indices, expected_samples = FileReader.processing_signal(fileName)
 
@@ -88,9 +88,9 @@ def SubSignalSamplesAreEqual(userFirstSignal, userSecondSignal, Your_indices, Yo
 def NormalizeSignal(MinRange, MaxRange, Your_indices, Your_samples):
     fileName = ''
     if MinRange == -1 and MaxRange == 1:
-        fileName = "test/normalize of signal 1 -- output.txt"  # write here path of normalize signal 1 output.txt
+        fileName = "TestCases/Task2/normalize of signal 1 -- output.txt"  # write here path of normalize signal 1 output.txt
     elif MinRange == 0 and MaxRange == 1:
-        fileName = "test/normlize signal 2 -- output.txt"  # write here path of normalize signal 2 output.txt
+        fileName = "TestCases/Task2/normlize signal 2 -- output.txt"  # write here path of normalize signal 2 output.txt
 
     x, y, z, expected_indices, expected_samples = FileReader.processing_signal(fileName)
 
@@ -113,9 +113,9 @@ def NormalizeSignal(MinRange, MaxRange, Your_indices, Your_samples):
 def MultiplySignalByConst(User_Const, Your_indices, Your_samples):
     fileName = ''
     if User_Const == 5:
-        fileName = "test/MultiplySignalByConstant-Signal1 - by 5.txt"  # write here path of MultiplySignalByConstant-Signal1 - by 5.txt
+        fileName = "TestCases/Task2/MultiplySignalByConstant-Signal1 - by 5.txt"  # write here path of MultiplySignalByConstant-Signal1 - by 5.txt
     elif User_Const == 10:
-        fileName = "test/MultiplySignalByConstant-signal2 - by 10.txt"  # write here path of MultiplySignalByConstant-Signal2 - by 10.txt
+        fileName = "TestCases/Task2/MultiplySignalByConstant-signal2 - by 10.txt"  # write here path of MultiplySignalByConstant-Signal2 - by 10.txt
 
     x, y, z, expected_indices, expected_samples = FileReader.processing_signal(fileName)
     if (len(expected_samples) != len(Your_samples)) and (len(expected_indices) != len(Your_indices)):
@@ -143,9 +143,9 @@ def MultiplySignalByConst(User_Const, Your_indices, Your_samples):
 def ShiftSignalByConst(Shift_value, Your_indices, Your_samples):
     global file_name
     if Shift_value == 500:
-        file_name = "test/output shifting by add 500.txt"  # write here path of output shifting by add 500.txt
+        file_name = "TestCases/Task2/output shifting by add 500.txt"  # write here path of output shifting by add 500.txt
     elif Shift_value == -500:
-        file_name = "test/output shifting by minus 500.txt"  # write here path of output shifting by minus 500.txt
+        file_name = "TestCases/Task2/output shifting by minus 500.txt"  # write here path of output shifting by minus 500.txt
 
     x, y, z, expected_indices, expected_samples = FileReader.processing_signal(file_name)
     if (len(expected_samples) != len(Your_samples)) and (len(expected_indices) != len(Your_indices)):

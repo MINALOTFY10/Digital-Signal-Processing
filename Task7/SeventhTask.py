@@ -1,8 +1,8 @@
 from matplotlib import pyplot as plt
 
 from test import ConvTest
-from utils.FileReader import FileReader
-from utils.plotSignal import plotSignal
+from utils.GlobalFunctions.FileReader import FileReader
+from utils.GlobalFunctions.plotSignal import plotSignal
 
 
 class SeventhTask:
@@ -41,7 +41,6 @@ class SeventhTask:
 
         #Plotting
         fig, (ax1) = plt.subplots(1, 1, figsize=(12, 5))
-        ax1.set_title("Convolution")
-        plotSignal(indices_output, samples_output, ax1)
+        plotSignal(indices_output, samples_output, "Convolution", ax1)
 
         plt.show()

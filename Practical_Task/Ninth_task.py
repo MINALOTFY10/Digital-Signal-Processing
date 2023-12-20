@@ -3,9 +3,10 @@ import math
 from matplotlib import pyplot as plt
 
 from Dft_idft.Dft_idft import DftIdft
+from Task4.FourthTask import FourthTask
 from test import ConvTest, Compare_Signals
-from utils.FileReader import FileReader
-from utils.plotSignal import plotSignal
+from utils.GlobalFunctions.FileReader import FileReader
+from utils.GlobalFunctions.plotSignal import plotSignal
 
 
 class NinthTask:
@@ -25,8 +26,8 @@ class NinthTask:
         listOfSamples1 = listOfSamples1 + [0] * pad_len1
         listOfSamples2 = listOfSamples2 + [0] * pad_len2
 
-        frequency1 = DftIdft.Dft(listOfSamples1)
-        frequency2 = DftIdft.Dft(listOfSamples2)
+        frequency1 = FourthTask.ComputeFrequencies("DFT", listOfSamples1)
+        frequency2 = FourthTask.ComputeFrequencies("DFT", listOfSamples2)
 
         # Perform convolution in frequency domain
         outputFrequency = []
@@ -39,21 +40,30 @@ class NinthTask:
             amplitudeList.append(round(math.sqrt(outputFrequency[i].real ** 2 + outputFrequency[i].imag ** 2), 13))
             phaseShiftList.append(math.atan2(outputFrequency[i].imag, outputFrequency[i].real))
 
-        indices, Samples = DftIdft.Idft(amplitudeList, phaseShiftList)
+        # computing the DFT component by (real = A*cos(Phase Shift)) and (imag = A*sin(Phase Shift))
+        signalComponents = [complex(amp * math.cos(phase), amp * math.sin(phase))
+                            for amp, phase in zip(amplitudeList, phaseShiftList)]
+
+        # Compute Sequence in time domain X(n)
+        frequencies = FourthTask.ComputeFrequencies("IDFT", signalComponents)
+
+        output_samples =[]
+        for i in range(len(signalComponents)):
+            frequencies[i] /= len(signalComponents)
+
+            output_samples.append(round(frequencies[i].real))
 
         min_index = int(indices1[0] + indices2[0])
         max_index = int(indices1[int(noOfSample1) - 1] + indices2[int(noOfSample2) - 1])
 
-        indices_output = []
 
         # Computing the indices
+        indices_output = []
         for n in range(min_index, max_index + 1):
             indices_output.append(int(n))
 
         # Testing
-        print("indices: ", indices_output)
-        print("Samples: ", Samples)
-        ConvTest(indices_output, Samples)
+        ConvTest(indices_output, output_samples)
 
     @staticmethod
     def FastAutoCorrelation():
@@ -88,8 +98,7 @@ class NinthTask:
 
         # Plotting
         fig, (ax1) = plt.subplots(1, 1, figsize=(12, 5))
-        ax1.set_title("Fast Cross Correlation")
-        plotSignal(indices_list, output_samples, ax1)
+        plotSignal(indices_list, output_samples, "Fast Cross Correlation", ax1)
 
         plt.show()
 
@@ -128,6 +137,5 @@ class NinthTask:
 
         # Plotting
         fig, (ax1) = plt.subplots(1, 1, figsize=(12, 5))
-        ax1.set_title("Fast Cross Correlation")
-        plotSignal(indices_list1, output_samples, ax1)
+        plotSignal(indices_list1, output_samples, "Fast Cross Correlation", ax1)
         plt.show()

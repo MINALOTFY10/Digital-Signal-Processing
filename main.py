@@ -1,14 +1,8 @@
-import math
 import tkinter as tk
-
 import matplotlib.pyplot as plt
-from decimal import Decimal
-
 from Practical_Task.Ninth_task import NinthTask
 from Task1.DiscreteContinuousSignalDisplayer import DiscreteContinuousSignalDisplayer
 from Task1.SinCosSignalGenerator import SinCosSignalGenerator
-# from Task2 import ArithmeticOperations
-
 from Task2.ArithmeticOperations import ArithmeticOperations
 from Task3.Quantization import Quantization
 from Task4.FourthTask import FourthTask
@@ -16,8 +10,7 @@ from Task5.FifthTask import FifthTask
 from Task6.SixthTask import SixthTask
 from Task7.SeventhTask import SeventhTask
 from Task8.EighthTask import EighthTask
-from test import QuantizationTest1, QuantizationTest2
-from utils.FileReader import FileReader
+from utils.GlobalFunctions.FileReader import FileReader
 
 
 # Task 1.1 Read and display signal in continuous and discrete form
@@ -74,7 +67,7 @@ def Task5(command, coefficients):
     if command == "DCT":
         FifthTask.DCT(coefficients.get())
     elif command == "DCRemove":
-        FifthTask.RemoveDcComponent()
+        FifthTask.RemoveDcComponentTimeDomain()
 
 
 def Task6(command, windowSizeEntry, ShiftingValueEntry):
@@ -99,7 +92,7 @@ def Task7(command):
 
 def Task8(command):
     if command == "Correlation":
-        EighthTask.Correlation()
+        EighthTask.NormalizedCrossCorrelation()
 
 
 def Task9(command):
@@ -323,6 +316,7 @@ class AppWindow(tk.Tk):
                            width=30, height=3)
         button.pack(pady=20)
 
+    # Task 5 GUI
     def task_five_window(self):
         task5new_window = tk.Toplevel(self)
         task5new_window.title("Task 5")
@@ -343,6 +337,7 @@ class AppWindow(tk.Tk):
                            width=30, height=3)
         button.pack(pady=20)
 
+    # Task 6 GUI
     def task_six_window(self):
         task_six_window = tk.Toplevel(self)
         task_six_window.title("Task 6")
@@ -394,6 +389,7 @@ class AppWindow(tk.Tk):
                            width=30, height=3)
         button.pack(pady=20)
 
+    # Task 7 GUI
     def task_seven_window(self):
         task_seven_window = tk.Toplevel(self)
         task_seven_window.title("Task 7")
@@ -405,6 +401,7 @@ class AppWindow(tk.Tk):
                            width=30, height=3)
         button.pack(pady=20)
 
+    # Task 8 GUI
     def task_eight_window(self):
         task_eight_window = tk.Toplevel(self)
         task_eight_window.title("Task 8")
@@ -416,6 +413,7 @@ class AppWindow(tk.Tk):
                            width=30, height=3)
         button.pack(pady=20)
 
+    # Task 9 GUI
     def task_nine_window(self):
         task_nine_window = tk.Toplevel(self)
         task_nine_window.title("Task 9")

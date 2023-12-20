@@ -1,13 +1,11 @@
 import math
-import statistics
 
 from matplotlib import pyplot as plt
 
 from Task2.ArithmeticOperations import ArithmeticOperations
 from test import SignalSamplesAreEqual, Shift_Fold_Signal, SharpeningTest
-
-from utils.FileReader import FileReader
-from utils.plotSignal import plotSignal
+from utils.GlobalFunctions.FileReader import FileReader
+from utils.GlobalFunctions.plotSignal import plotSignal
 
 
 class SixthTask:
@@ -17,25 +15,22 @@ class SixthTask:
         IsPeriodic, signalType, noOfSample, indices, listOfSamples = FileReader.browse_signal_file()
         new_signal = []
         new_indices = []
+
         for i in range(len(listOfSamples) - int(window_size_entry) + 1):
             # summation of samples from i to i + w
             summation = sum(listOfSamples[i:i + int(window_size_entry)])
             new_signal.append(summation / int(window_size_entry))
             new_indices.append(i)
 
-        print("New signal : ", new_signal)
-        print(len(new_signal))
+
+        # Testing
+        SignalSamplesAreEqual("Smoothing", "TestCases/Task6/Moving Average/OutMovAvgTest1.txt", new_indices, new_signal)
+        # SignalSamplesAreEqual("Smoothing", "TestCases/Task6/Moving Average/OutMovAvgTest2.txt", new_indices, new_signal)
 
         # Plotting
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-        ax1.set_title("Before Smoothing")
-        ax2.set_title("After Smoothing")
-        plotSignal(indices, listOfSamples, ax1)
-        plotSignal(new_indices, new_signal, ax2)
-
-        # Testing
-        SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest1.txt", new_indices, new_signal)
-        # SignalSamplesAreEqual("Smoothing", "utils/OutMovAvgTest2.txt", new_indices, new_signal)
+        plotSignal(indices, listOfSamples, "Before Smoothing", ax1)
+        plotSignal(new_indices, new_signal, "After Smoothing", ax2)
         plt.show()
 
     @staticmethod
@@ -49,27 +44,25 @@ class SixthTask:
                        98.0, 99.0, 100.0]
 
         FirstDrev = []
-        firstdevInd = []
-        seconddevInd = []
+        firstDevInd = []
+        secondDevInd = []
         SecondDrev = []
         # First Derivative X(n) - X(n-1)
         for i in range(1, len(InputSignal)):
             FirstDrev.append(InputSignal[i] - InputSignal[i - 1])
-            firstdevInd.append(i)
+            firstDevInd.append(i)
 
         # Second Derivative X(n+1) - 2 * X(n) + X(n-1)
         for i in range(1, len(InputSignal) - 1):
             SecondDrev.append(InputSignal[i + 1] - (2 * InputSignal[i]) + InputSignal[i - 1])
-            seconddevInd.append(i)
+            secondDevInd.append(i)
 
         print("First Derivative, ", FirstDrev)
         print("Second Derivative, ", SecondDrev)
         # Plotting
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-        ax1.set_title("First Derviative")
-        ax2.set_title("Second Derviative")
-        plotSignal(firstdevInd, FirstDrev, ax1)
-        plotSignal(seconddevInd, SecondDrev, ax2)
+        plotSignal(firstDevInd, FirstDrev, "First Derivative", ax1)
+        plotSignal(secondDevInd, SecondDrev, "Second Derivative", ax2)
         # Testing
         SharpeningTest(FirstDrev, SecondDrev)
         plt.show()
@@ -87,11 +80,11 @@ class SixthTask:
 
         # Plotting
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-        plotSignal(indices, listOfSamples, ax1)
-        plotSignal(indices, FoldedList, ax2)
+        plotSignal(indices, listOfSamples, "Original Signal", ax1)
+        plotSignal(indices, FoldedList, "Folded Signal", ax2)
 
         # Testing
-        SignalSamplesAreEqual("Folding Signal", "utils/Output_fold.txt", indices, FoldedList)
+        SignalSamplesAreEqual("Folding Signal", "TestCases/Task6/Shifting and Folding/Output_fold.txt", indices, FoldedList)
         plt.show()
 
     @staticmethod
@@ -109,12 +102,12 @@ class SixthTask:
 
         # Plotting
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-        plotSignal(indices, FoldedList, ax1)
-        plotSignal(newIndices, FoldedList, ax2)
+        plotSignal(indices, FoldedList, "Original Signal", ax1)
+        plotSignal(newIndices, FoldedList, "Result", ax2)
 
         # Testing
-        Shift_Fold_Signal("utils/Output_ShifFoldedby500.txt", newIndices, FoldedList)
-        # Shift_Fold_Signal("utils/Output_ShiftFoldedby-500.txt", newIndices, FoldedList)
+        Shift_Fold_Signal("TestCases/Task6/Shifting and Folding/Output_ShifFoldedby500.txt", newIndices, FoldedList)
+        # Shift_Fold_Signal("TestCases/Task6/Shifting and Folding/Output_ShiftFoldedby-500.txt", newIndices, FoldedList)
         plt.show()
 
     @staticmethod
@@ -176,5 +169,5 @@ class SixthTask:
         plt.plot(indices, Samples, marker='o', color='b', linestyle='-')
         plt.legend()
         plt.xlim(0, 30)
-        SignalSamplesAreEqual("DC Remover", "utils/DC_component_output.txt", indices, Samples)
+        SignalSamplesAreEqual("DC Remover", "TestCases/Task6/Remove DC component/DC_component_output.txt", indices, Samples)
         plt.show()

@@ -1,8 +1,9 @@
 import math
 
 from test import QuantizationTest1, QuantizationTest2
-from utils.FileReader import FileReader
 from decimal import Decimal
+
+from utils.GlobalFunctions.FileReader import FileReader
 
 
 class Quantization:
@@ -67,20 +68,6 @@ class Quantization:
                     error.append(float(Decimal(str(midpoints[i])) - Decimal(str(sample))))  # error = quantized-sample
                     break
 
-        # printing Output Results
-        print("midpoints: ")
-        print(midpoints)
-        print("intervals: ")
-        print(intervals)
-        print("interval_index: ")
-        print(interval_index)
-        print("encoding: ")
-        print(encoding)
-        print("quantized: ")
-        print(quantized)
-        print("error: ")
-        print(error)
-
         # Testing
-        QuantizationTest1("test/Test_Task3/Test 1/Quan1_Out.txt", encoding, quantized)
-        # QuantizationTest2("test/Test_Task3/Test 2/Quan2_Out.txt", interval_index, encoding, quantized, error)
+        QuantizationTest1("TestCases/Task3/Test 1/Quan1_Out.txt", encoding, quantized)
+        # QuantizationTest2("TestCases/Task3/Test 2/Quan2_Out.txt", interval_index, encoding, quantized, error)
